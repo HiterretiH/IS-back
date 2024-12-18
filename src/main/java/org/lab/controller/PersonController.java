@@ -5,7 +5,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.Secured;
-import org.lab.service.PersonService;
 import org.lab.utils.ExceptionHandler;
 
 import java.util.List;

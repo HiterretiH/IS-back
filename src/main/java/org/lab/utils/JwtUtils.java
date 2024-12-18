@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import io.github.cdimascio.dotenv.Dotenv;
+import org.lab.model.Role;
 import org.lab.model.User;
 
 import java.util.Date;
@@ -22,7 +23,6 @@ public class JwtUtils {
         return JWT.create()
                 .withSubject(user.getId().toString())
                 .withClaim("username", user.getUsername())
-                .withClaim("email", user.getEmail())
                 .withClaim("role", user.getRole().name())
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
@@ -52,7 +52,6 @@ public class JwtUtils {
             User user = new User();
             user.setId(Integer.valueOf(jwt.getSubject()));
             user.setUsername(jwt.getClaim("username").asString());
-            user.setEmail(jwt.getClaim("email").asString());
             user.setRole(Role.valueOf(jwt.getClaim("role").asString()));
 
             return user;

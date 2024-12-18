@@ -4,7 +4,6 @@ import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
 import org.lab.annotations.AdminOnly;
 import org.lab.annotations.Secured;
-import org.lab.service.AdminRequestService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;

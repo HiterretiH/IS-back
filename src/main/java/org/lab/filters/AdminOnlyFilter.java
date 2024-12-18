@@ -9,6 +9,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
 import org.lab.annotations.AdminOnly;
+import org.lab.model.Role;
 import org.lab.model.User;
 
 import java.lang.annotation.Annotation;
