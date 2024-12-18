@@ -1,40 +1,28 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
-
-import java.sql.Timestamp;
+import jakarta.validation.constraints.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false, unique = true, length = 100)
+    @NotNull
+    @NotEmpty
     private String username;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
+    @Column(nullable = false, length = 255)
+    @NotNull
+    @NotEmpty
+    private String passwordHash;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Timestamp createdAt;
-
-    @PrePersist
-    protected void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
-        if (role == null) {
-            role = Role.REGULAR;
-        }
-    }
-
+    private Role role; // Использовать Enum 'role_type'
 
     public Integer getId() {
         return id;
@@ -52,20 +40,12 @@ public class User {
         this.username = username;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPasswordHash() {
+        return passwordHash;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public Role getRole() {
@@ -74,13 +54,5 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
     }
 }

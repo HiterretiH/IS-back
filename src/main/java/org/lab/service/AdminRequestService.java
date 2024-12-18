@@ -2,9 +2,6 @@ package org.lab.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.lab.model.AdminRequest;
-import org.lab.model.RequestStatus;
-import org.lab.model.Role;
 import org.lab.model.User;
 import org.lab.repository.AdminRequestRepository;
 import org.lab.repository.UserRepository;

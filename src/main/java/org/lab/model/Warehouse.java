@@ -3,8 +3,8 @@ package org.lab.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "location")
-public class Location {
+@Table(name = "warehouse")
+public class Warehouse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -12,10 +12,8 @@ public class Location {
     @Column(nullable = false, length = 150)
     private String name;
 
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private Integer locationRow;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String address;
 
     public Integer getId() {
         return id;
@@ -33,19 +31,11 @@ public class Location {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getLocationRow() {
-        return locationRow;
-    }
-
-    public void setLocationRow(Integer locationRow) {
-        this.locationRow = locationRow;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
