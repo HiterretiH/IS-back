@@ -2,6 +2,7 @@ package org.lab.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import org.lab.model.WarehouseOperator;
 import org.lab.model.Worker;
 import org.lab.repository.WorkerRepository;
 
@@ -12,11 +13,13 @@ public class WorkerService {
     @Inject
     private WorkerRepository workerRepository;
 
-    public List<Worker> findAll() {return workerRepository.findAll();}
+    public List<Worker> getAll() {return workerRepository.findAll();}
 
-    public Worker findById(int id) {return workerRepository.findById(id);}
+    public Worker getById(int id) {return workerRepository.findById(id);}
 
-    public void save(Worker worker) {workerRepository.save(worker);}
+    public void create(Worker worker) {workerRepository.save(worker);}
 
     public void delete(Worker worker) {workerRepository.delete(worker.getId());}
+
+    public void fire(WarehouseOperator warehouseOperator) {}
 }

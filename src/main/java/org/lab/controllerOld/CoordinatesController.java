@@ -1,4 +1,4 @@
-package org.lab.controller;
+package org.lab.controllerOld;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -9,22 +9,23 @@ import org.lab.utils.ExceptionHandler;
 
 import java.util.List;
 
-@Path("/persons")
+@Path("/coordinates")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class PersonController {
+public class CoordinatesController {
 
     @Inject
-    private PersonService personService;
+    private CoordinatesService coordinatesService;
 
     @GET
     @Secured
-    public Response getAllPersons() {
+    public Response getAllCoordinates() {
         try {
-            List<Person> persons = personService.getAllPerson();
-            return Response.ok(persons).build();
+            List<Coordinates> coordinates = coordinatesService.getAllCoordinates();
+            return Response.ok(coordinates).build();
         } catch (Exception e) {
             return ExceptionHandler.handle(e);
+
         }
     }
 }

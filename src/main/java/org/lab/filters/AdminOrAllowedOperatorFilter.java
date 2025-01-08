@@ -12,7 +12,7 @@ import jakarta.ws.rs.ext.Provider;
 import org.lab.annotations.AdminOrAllowedOperator;
 import org.lab.model.*;
 import org.lab.service.ProductService;
-import org.lab.service.TypesAndOperatorsService;
+import org.lab.service.WarehouseOperatorService;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
@@ -25,7 +25,7 @@ public class AdminOrAllowedOperatorFilter implements ContainerRequestFilter {
     ResourceInfo resourceInfo;
 
     @Inject
-    TypesAndOperatorsService typesAndOperatorsService;
+    WarehouseOperatorService warehouseOperatorService;
 
     @Inject
     ProductService productService;
@@ -47,7 +47,7 @@ public class AdminOrAllowedOperatorFilter implements ContainerRequestFilter {
             String path = requestContext.getUriInfo().getPath();
             int productId = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
 
-            Product product = productService.findById(productId);
+            Product product = productService.getById(productId);
 
             if (product == null || product.getProductType() == null) {
                 requestContext.abortWith(Response.status(Response.Status.NOT_FOUND).entity("Product not found").build());
@@ -56,9 +56,9 @@ public class AdminOrAllowedOperatorFilter implements ContainerRequestFilter {
 
             ProductType productType = product.getProductType();
 
-            List<TypesAndOperators> typesAndOperators = typesAndOperatorsService.findByUserAndType(user, productType);
+            WarehouseOperator warehouseOperator = warehouseOperatorService.getByUser(user);
 
-            if (typesAndOperators.isEmpty() && !user.getRole().equals(Role.ADMIN)) {
+            if (warehouseOperator.getProductType() != productType || !user.getRole().equals(Role.MANAGER)) {
                 requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("User not authorized to modify this product").build());
             }
         }

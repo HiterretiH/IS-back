@@ -22,7 +22,7 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role; // Использовать Enum 'role_type'
+    private Role role;
 
     public Integer getId() {
         return id;

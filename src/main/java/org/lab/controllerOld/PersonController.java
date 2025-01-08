@@ -1,4 +1,4 @@
-package org.lab.controller;
+package org.lab.controllerOld;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -9,21 +9,20 @@ import org.lab.utils.ExceptionHandler;
 
 import java.util.List;
 
-@Path("/organizations")
+@Path("/persons")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-public class OrganizationController {
+public class PersonController {
 
     @Inject
-    private OrganizationService organizationService;
+    private PersonService personService;
 
     @GET
     @Secured
-    public Response getAllOrganizations() {
+    public Response getAllPersons() {
         try {
-            List<Organization> organizations = organizationService.getAllOrganizations();
-            return Response.ok(organizations).build();
-
+            List<Person> persons = personService.getAllPerson();
+            return Response.ok(persons).build();
         } catch (Exception e) {
             return ExceptionHandler.handle(e);
         }

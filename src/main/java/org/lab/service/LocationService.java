@@ -12,16 +12,20 @@ public class LocationService {
     @Inject
     private LocationRepository locationRepository;
 
-    public List<Location> findAll() {
+    public List<Location> getAll() {
         return locationRepository.findAll();
     }
 
-    public Location findById(int id) {
+    public Location getById(int id) {
         return locationRepository.findById(id);
     }
 
-    public void save(Location location) {
+    public void create(Location location) {
         locationRepository.save(location);
+    }
+
+    public void update(Location location) {
+        locationRepository.update(location);
     }
 
     public void delete(Location location) {

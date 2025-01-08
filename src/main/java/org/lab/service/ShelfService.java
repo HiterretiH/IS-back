@@ -12,15 +12,15 @@ public class ShelfService {
     @Inject
     private ShelfRepository shelfRepository;
 
-    public List<Shelf> findAll() {
+    public List<Shelf> getAll() {
         return shelfRepository.findAll();
     }
 
-    public Shelf findById(int id) {
+    public Shelf getById(int id) {
         return shelfRepository.findById(id);
     }
 
-    public void save(Shelf shelf) {
+    public void create(Shelf shelf) {
         shelfRepository.save(shelf);
     }
 

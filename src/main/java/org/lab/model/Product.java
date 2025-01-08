@@ -19,12 +19,16 @@ public class Product {
     private Location location;
 
     @ManyToOne
-    @JoinColumn(name = "supplier", nullable = false)
+    @JoinColumn(name = "supplier_id", nullable = false)
     private Partners supplier;
 
     @ManyToOne
-    @JoinColumn(name = "customer", nullable = false)
+    @JoinColumn(name = "customer_id", nullable = false)
     private Partners customer;
+
+    @ManyToOne
+    @JoinColumn(name = "queue_id", nullable = false)
+    private Queue queue;
 
     @Column(nullable = false, length = 100)
     private String name;

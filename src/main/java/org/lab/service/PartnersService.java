@@ -12,15 +12,15 @@ public class PartnersService {
     @Inject
     private PartnersRepository partnersRepository;
 
-    public List<Partners> findAll() {
+    public List<Partners> getAll() {
         return partnersRepository.findAll();
     }
 
-    public Partners findById(int id) {
+    public Partners getById(int id) {
         return partnersRepository.findById(id);
     }
 
-    public void save(Partners partner) {
+    public void create(Partners partner) {
         partnersRepository.save(partner);
     }
 

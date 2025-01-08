@@ -17,6 +17,14 @@ public class WarehouseOperator {
     @JoinColumn(name = "worker_id", nullable = false)
     private Worker worker;
 
+    @ManyToOne
+    @JoinColumn(name = "product_type")
+    private ProductType productType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
     public Integer getId() {
         return id;
     }
@@ -27,6 +35,10 @@ public class WarehouseOperator {
 
     public User getAppUser() {
         return appUser;
+    }
+
+    public ProductType getProductType() {
+        return productType;
     }
 
     public void setAppUser(User appUser) {

@@ -30,28 +30,15 @@ public class UserService {
         return null;
     }
 
-    public void logout() {
-
-    }
-
-    public User getUserById(Integer id) {
+    public User getById(Integer id) {
         return userRepository.findById(id);
     }
 
-    public User getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
-    public List<User> getAllUsers() {
+    public List<User> getAll() {
         return userRepository.findAll();
     }
 
-    public User updateUser(Integer id, User user) {
-        user.setId(id); // Ensure the ID is set for the update
-        return userRepository.update(user);
-    }
-
-    public void deleteUser(Integer id) {
+    public void delete(Integer id) {
         userRepository.delete(id);
     }
 }

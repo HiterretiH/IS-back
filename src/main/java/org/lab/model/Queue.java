@@ -12,6 +12,10 @@ public class Queue {
     @Column(nullable = false)
     private Integer capacity;
 
+    @ManyToOne
+    @JoinColumn(name = "station_id", nullable = false)
+    private SortingStation sortingStation;
+
     public Integer getId() {
         return id;
     }

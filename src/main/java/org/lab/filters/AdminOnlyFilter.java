@@ -35,7 +35,7 @@ public class AdminOnlyFilter implements ContainerRequestFilter {
         if (isAdminOnly) {
             User user = (User) requestContext.getProperty("currentUser");
 
-            if (user == null || !user.getRole().equals(Role.ADMIN)) {
+            if (user == null || !user.getRole().equals(Role.MANAGER)) {
                 requestContext.abortWith(
                         Response.status(Response.Status.FORBIDDEN).entity("Only admins can access this resource").build()
                 );

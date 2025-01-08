@@ -12,15 +12,15 @@ public class ProductTypeService {
     @Inject
     private ProductTypeRepository productTypeRepository;
 
-    public List<ProductType> findAll() {
+    public List<ProductType> getAll() {
         return productTypeRepository.findAll();
     }
 
-    public ProductType findById(int id) {
+    public ProductType getById(int id) {
         return productTypeRepository.findById(id);
     }
 
-    public void save(ProductType productType) {
+    public void create(ProductType productType) {
         productTypeRepository.save(productType);
     }
 

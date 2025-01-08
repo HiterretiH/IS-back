@@ -12,19 +12,24 @@ public class ManagerService {
     @Inject
     private ManagerRepository managerRepository;
 
-    public List<Manager> findAll() {
+    public List<Manager> getAll() {
         return managerRepository.findAll();
     }
 
-    public Manager findById(int id) {
+    public Manager getById(int id) {
         return managerRepository.findById(id);
     }
 
-    public void save(Manager manager) {
+    public void create(Manager manager) {
         managerRepository.save(manager);
     }
 
     public void delete(Manager manager) {
         managerRepository.delete(manager.getId());
+    }
+
+    // Передать позицию менеджера другому пользователю, снимая себя с должности
+    public void reassign(Manager manager) {
+        managerRepository.update(manager);
     }
 }

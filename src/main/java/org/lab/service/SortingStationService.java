@@ -12,15 +12,15 @@ public class SortingStationService {
     @Inject
     private SortingStationRepository sortingStationRepository;
 
-    public List<SortingStation> findAll() {
+    public List<SortingStation> getAll() {
         return sortingStationRepository.findAll();
     }
 
-    public SortingStation findById(int id) {
+    public SortingStation getById(int id) {
         return sortingStationRepository.findById(id);
     }
 
-    public void save(SortingStation sortingStation) {
+    public void create(SortingStation sortingStation) {
         sortingStationRepository.save(sortingStation);
     }
 
