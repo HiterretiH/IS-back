@@ -23,13 +23,16 @@ public class WorkerService {
 
     public void hire(Worker worker) {
         worker.setStatus(Status.HIRED);
+        workerRepository.update(worker);
     }
 
     public void reject(Worker worker) {
         worker.setStatus(Status.REJECTED);
+        workerRepository.update(worker);
     }
 
     public void fire(Worker worker) {
         worker.setStatus(Status.FIRED);
+        workerRepository.update(worker);
     }
 }
