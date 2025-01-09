@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.model.Role;
 import org.lab.model.User;
 import org.lab.model.WarehouseOperator;
 import org.lab.service.UserService;
@@ -21,6 +22,7 @@ public class UserController {
     @POST
     @Path("/register")
     public Response register(User user) {
+        user.setRole(Role.OPERATOR);
         String token = userService.register(user);
         if (token == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Registration failed").build();
