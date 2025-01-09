@@ -15,10 +15,10 @@ public class UserRepository extends GenericRepository<User, Integer> {
 
     public User findByUsername(String username) {
         try {
-            Query query = entityManager.createNativeQuery(
-                    "SELECT * FROM find_user_by_username(:username)", User.class);
-            query.setParameter("username", username);
-            return (User) query.getSingleResult();
+            return entityManager.createQuery(
+                            "SELECT u FROM User u WHERE u.username = :username", User.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
