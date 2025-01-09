@@ -193,3 +193,35 @@ FROM product p
 WHERE p.queue_id = queue_id;
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION find_queues_by_sorting_station(sorting_station_id INT)
+RETURNS SETOF queue AS $$
+BEGIN
+RETURN QUERY
+SELECT q.*
+FROM queue q
+WHERE q.sorting_station_id = sorting_station_id;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION find_user_by_username(username TEXT)
+RETURNS SETOF app_user AS $$
+BEGIN
+RETURN QUERY
+SELECT u.*
+FROM app_user u
+WHERE u.username = username
+    LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION find_warehouse_operator_by_user_id(user_id INT)
+RETURNS SETOF warehouse_operator AS $$
+BEGIN
+RETURN QUERY
+SELECT wo.*
+FROM warehouse_operator wo
+WHERE wo.app_user_id = user_id
+    LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;

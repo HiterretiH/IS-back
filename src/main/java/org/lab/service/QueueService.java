@@ -36,4 +36,15 @@ public class QueueService {
     public void delete(Queue queue) {
         queueRepository.delete(queue.getId());
     }
+
+    public List<Product> getAllProducts(Queue queue) {
+        return productRepository.findAllInQueue(queue.getId());
+    }
+
+    public void interrupt(Queue queue) {
+        for (Product product : getAllProducts(queue)) {
+            product.setQueue(null);
+            productRepository.update(product);
+        }
+    }
 }
