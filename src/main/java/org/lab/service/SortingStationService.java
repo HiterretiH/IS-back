@@ -3,7 +3,6 @@ package org.lab.service;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.lab.model.Product;
 import org.lab.model.ProductState;
 import org.lab.model.Queue;

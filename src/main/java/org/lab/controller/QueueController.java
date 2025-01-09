@@ -58,7 +58,8 @@ public class QueueController {
         if (queue == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        queueService.setSortingStation(sortingStation);
+        queue.setSortingStation(sortingStation);
+        queueService.update(queue);
         return Response.ok().build();
     }
 
