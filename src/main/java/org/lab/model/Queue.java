@@ -1,6 +1,7 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "queue")
@@ -10,10 +11,12 @@ public class Queue {
     private Integer id;
 
     @Column(nullable = false)
+    @NotNull
     private Integer capacity;
 
     @ManyToOne
     @JoinColumn(name = "station_id", nullable = false)
+    @NotNull
     private SortingStation sortingStation;
 
     public SortingStation getSortingStation() {

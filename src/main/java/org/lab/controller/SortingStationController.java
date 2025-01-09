@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.SortingStation;
 import org.lab.service.SortingStationService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class SortingStationController {
     @ManagerOnly
     @POST
     public Response createSortingStation(SortingStation sortingStation) {
+        if (!ModelValidator.validate(sortingStation)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         sortingStationService.create(sortingStation);
         return Response.status(Response.Status.CREATED).build();
     }

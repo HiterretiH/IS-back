@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.OperatorRequest;
 import org.lab.service.OperatorRequestService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class OperatorRequestController {
     @ManagerOnly
     @POST
     public Response createOperatorRequest(OperatorRequest operatorRequest) {
+        if (!ModelValidator.validate(operatorRequest)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         operatorRequestService.create(operatorRequest);
         return Response.status(Response.Status.CREATED).entity(operatorRequest).build();
     }
@@ -54,7 +59,12 @@ public class OperatorRequestController {
         if (existingRequest == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        operatorRequest.setId(id); // Ensure correct ID is set
+        operatorRequest.setId(id);
+
+        if (!ModelValidator.validate(operatorRequest)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         operatorRequestService.update(operatorRequest);
         return Response.ok(operatorRequest).build();
     }

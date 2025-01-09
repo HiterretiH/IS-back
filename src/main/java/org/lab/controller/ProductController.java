@@ -10,6 +10,7 @@ import org.lab.model.Product;
 import org.lab.model.SortingStation;
 import org.lab.service.ProductService;
 import org.lab.service.SortingStationService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -46,6 +47,10 @@ public class ProductController {
     @ManagerOrAllowedOperator
     @POST
     public Response createProduct(Product product) {
+        if (!ModelValidator.validate(product)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         productService.create(product);
         return Response.status(Response.Status.CREATED).entity(product).build();
     }
@@ -59,7 +64,12 @@ public class ProductController {
         if (existingProduct == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        product.setId(id);  // Ensuring the correct ID is used
+        product.setId(id);
+
+        if (!ModelValidator.validate(product)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         productService.update(product);
         return Response.ok(product).build();
     }

@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.Queue;
 import org.lab.service.QueueService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class QueueController {
     @ManagerOnly
     @POST
     public Response createQueue(Queue queue) {
+        if (!ModelValidator.validate(queue)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         queueService.create(queue);
         return Response.status(Response.Status.CREATED).entity(queue).build();
     }

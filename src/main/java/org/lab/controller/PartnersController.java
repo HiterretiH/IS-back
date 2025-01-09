@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.Partners;
 import org.lab.service.PartnersService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class PartnersController {
     @ManagerOnly
     @POST
     public Response createPartner(Partners partner) {
+        if (!ModelValidator.validate(partner)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         partnersService.create(partner);
         return Response.status(Response.Status.CREATED).entity(partner).build();
     }

@@ -9,6 +9,7 @@ import org.lab.annotations.Secured;
 import org.lab.model.Role;
 import org.lab.model.User;
 import org.lab.service.UserService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class UserController {
     @Path("/register")
     public Response register(User user) {
         user.setRole(Role.OPERATOR);
+
+        if (!ModelValidator.validate(user)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         String token = userService.register(user);
         if (token == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Registration failed").build();

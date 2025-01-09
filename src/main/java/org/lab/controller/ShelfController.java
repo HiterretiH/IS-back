@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.Shelf;
 import org.lab.service.ShelfService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class ShelfController {
     @ManagerOnly
     @POST
     public Response createShelf(Shelf shelf) {
+        if (!ModelValidator.validate(shelf)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         shelfService.create(shelf);
         return Response.status(Response.Status.CREATED).entity(shelf).build();
     }

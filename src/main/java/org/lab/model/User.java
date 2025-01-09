@@ -11,11 +11,13 @@ public class User {
     private Integer id;
 
     @Column(nullable = false, unique = true, length = 100)
+    @Size(max = 100)
     @NotNull
     @NotEmpty
     private String username;
 
     @Column(nullable = false, length = 255)
+    @Size(max = 255)
     @NotNull
     @NotEmpty
     private String password;

@@ -9,6 +9,7 @@ import org.lab.annotations.Secured;
 import org.lab.model.Status;
 import org.lab.model.Worker;
 import org.lab.service.WorkerService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -43,6 +44,11 @@ public class WorkerController {
     @ManagerOnly
     public Response createWorker(Worker worker) {
         worker.setStatus(Status.PENDING);
+
+        if (!ModelValidator.validate(worker)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         workerService.create(worker);
         return Response.status(Response.Status.CREATED).entity(worker).build();
     }

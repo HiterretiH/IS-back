@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.SortingRequest;
 import org.lab.service.SortingRequestService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class SortingRequestController {
     @ManagerOnly
     @POST
     public Response createSortingRequest(SortingRequest sortingRequest) {
+        if (!ModelValidator.validate(sortingRequest)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         sortingRequestService.create(sortingRequest);
         return Response.status(Response.Status.CREATED).entity(sortingRequest).build();
     }

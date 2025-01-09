@@ -9,6 +9,7 @@ import org.lab.annotations.Secured;
 import org.lab.model.ProductType;
 import org.lab.model.WarehouseOperator;
 import org.lab.service.WarehouseOperatorService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -42,6 +43,10 @@ public class WarehouseOperatorController {
     @ManagerOnly
     @POST
     public Response createWarehouseOperator(WarehouseOperator warehouseOperator) {
+        if (!ModelValidator.validate(warehouseOperator)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         warehouseOperatorService.create(warehouseOperator);
         return Response.status(Response.Status.CREATED).entity(warehouseOperator).build();
     }

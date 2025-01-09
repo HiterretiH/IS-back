@@ -1,6 +1,7 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "manager")
@@ -11,14 +12,17 @@ public class Manager {
 
     @ManyToOne
     @JoinColumn(name = "app_user_id", nullable = false)
+    @NotNull
     private User appUser;
 
     @ManyToOne
     @JoinColumn(name = "worker_id", nullable = false)
+    @NotNull
     private Worker worker;
 
     @ManyToOne
     @JoinColumn(name = "warehouse_id", nullable = false)
+    @NotNull
     private Warehouse warehouse;
 
     public Integer getId() {

@@ -9,6 +9,7 @@ import org.lab.annotations.Secured;
 import org.lab.model.Manager;
 import org.lab.model.User;
 import org.lab.service.ManagerService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -42,6 +43,10 @@ public class ManagerController {
     @ManagerOnly
     @POST
     public Response createManager(Manager manager) {
+        if (!ModelValidator.validate(manager)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         managerService.create(manager);
         return Response.status(Response.Status.CREATED).entity(manager).build();
     }
@@ -55,7 +60,12 @@ public class ManagerController {
         if (existingManager == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        manager.setId(id); // Ensure the correct ID is set
+        manager.setId(id);
+
+        if (!ModelValidator.validate(manager)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         managerService.update(manager);
         return Response.ok(manager).build();
     }

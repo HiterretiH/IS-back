@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.ProductType;
 import org.lab.service.ProductTypeService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -41,6 +42,10 @@ public class ProductTypeController {
     @ManagerOnly
     @POST
     public Response createProductType(ProductType productType) {
+        if (!ModelValidator.validate(productType)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         productTypeService.create(productType);
         return Response.status(Response.Status.CREATED).entity(productType).build();
     }

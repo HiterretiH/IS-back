@@ -18,7 +18,6 @@ public class UserService {
     public String register(User user) {
         user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
         User createdUser = userRepository.save(user);
-        userRepository.save(createdUser);
         return JwtUtils.generateToken(createdUser);
     }
 
