@@ -40,6 +40,7 @@ public class WorkerController {
 
     @POST
     @Secured
+    @ManagerOnly
     public Response createWorker(Worker worker) {
         worker.setStatus(Status.PENDING);
         workerService.create(worker);

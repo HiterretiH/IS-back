@@ -13,7 +13,6 @@ import org.lab.annotations.ManagerOrAllowedOperator;
 import org.lab.model.*;
 import org.lab.repository.WarehouseOperatorRepository;
 import org.lab.service.ProductService;
-import java.lang.annotation.Annotation;
 
 @Provider
 @Priority(Priorities.AUTHORIZATION)
@@ -30,16 +29,7 @@ public class ManagerOrAllowedOperatorFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        boolean isAdminOrAllowedOperator = false;
-
-        for (Annotation annotation : resourceInfo.getResourceMethod().getAnnotations()) {
-            if (ManagerOrAllowedOperator.class.isAssignableFrom(annotation.annotationType())) {
-                isAdminOrAllowedOperator = true;
-                break;
-            }
-        }
-
-        if (isAdminOrAllowedOperator) {
+        if (resourceInfo.getResourceMethod().isAnnotationPresent(ManagerOrAllowedOperator.class)) {
             User user = (User) requestContext.getProperty("currentUser");
 
             String path = requestContext.getUriInfo().getPath();

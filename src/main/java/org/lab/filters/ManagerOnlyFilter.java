@@ -12,8 +12,6 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.model.Role;
 import org.lab.model.User;
 
-import java.lang.annotation.Annotation;
-
 @Provider
 @Priority(Priorities.AUTHORIZATION)
 public class ManagerOnlyFilter implements ContainerRequestFilter {
@@ -23,21 +21,12 @@ public class ManagerOnlyFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) {
-        boolean isAdminOnly = false;
-
-        for (Annotation annotation : resourceInfo.getResourceMethod().getAnnotations()) {
-            if (ManagerOnly.class.isAssignableFrom(annotation.annotationType())) {
-                isAdminOnly = true;
-                break;
-            }
-        }
-
-        if (isAdminOnly) {
+        if (resourceInfo.getResourceMethod().isAnnotationPresent(ManagerOnly.class)) {
             User user = (User) requestContext.getProperty("currentUser");
 
             if (user == null || !user.getRole().equals(Role.MANAGER)) {
                 requestContext.abortWith(
-                        Response.status(Response.Status.FORBIDDEN).entity("Only admins can access this resource").build()
+                        Response.status(Response.Status.FORBIDDEN).entity("Only managers can access this resource").build()
                 );
             }
         }
