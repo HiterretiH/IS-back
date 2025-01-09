@@ -5,7 +5,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.model.Product;
+import org.lab.model.SortingStation;
 import org.lab.service.ProductService;
+import org.lab.service.SortingStationService;
 
 import java.util.List;
 
@@ -16,6 +18,9 @@ public class ProductController {
 
     @Inject
     private ProductService productService;
+
+    @Inject
+    private SortingStationService sortingStationService;
 
     @GET
     public Response getAllProducts() {
@@ -39,6 +44,18 @@ public class ProductController {
         return Response.status(Response.Status.CREATED).entity(product).build();
     }
 
+    @PUT
+    @Path("/{id}")
+    public Response updateProduct(@PathParam("id") int id, Product product) {
+        Product existingProduct = productService.getById(id);
+        if (existingProduct == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        product.setId(id);  // Ensuring the correct ID is used
+        productService.update(product);
+        return Response.ok(product).build();
+    }
+
     @DELETE
     @Path("/{id}")
     public Response deleteProduct(@PathParam("id") int id) {
@@ -47,18 +64,7 @@ public class ProductController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         productService.delete(product);
-        return Response.noContent().build();
-    }
-
-    @PUT
-    @Path("/{id}/ship")
-    public Response shipProduct(@PathParam("id") int id) {
-        Product product = productService.getById(id);
-        if (product == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        productService.ship(product);
-        return Response.ok().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PUT
@@ -69,39 +75,41 @@ public class ProductController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         productService.dispose(product);
-        return Response.ok().build();
+        return Response.ok(product).build();
     }
 
     @PUT
-    @Path("/{id}/sort-to-store")
-    public Response sortProductToStore(@PathParam("id") int id) {
+    @Path("/{id}/sort-to-ship/{stationId}")
+    public Response sortToShip(@PathParam("id") int id, @PathParam("stationId") int stationId) {
+        Product product = productService.getById(id);
+        SortingStation sortingStation = sortingStationService.getById(stationId);
+        if (product == null || sortingStation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        productService.sortToShip(product, sortingStation);
+        return Response.ok(product).build();
+    }
+
+    @PUT
+    @Path("/{id}/sort-to-store/{stationId}")
+    public Response sortToStore(@PathParam("id") int id, @PathParam("stationId") int stationId) {
+        Product product = productService.getById(id);
+        SortingStation sortingStation = sortingStationService.getById(stationId);
+        if (product == null || sortingStation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        productService.sortToStore(product, sortingStation);
+        return Response.ok(product).build();
+    }
+
+    @PUT
+    @Path("/{id}/priority")
+    public Response setProductPriority(@PathParam("id") int id, @QueryParam("priority") int priority) {
         Product product = productService.getById(id);
         if (product == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        productService.sortToStore(product);
-        return Response.ok().build();
-    }
-
-    @PUT
-    @Path("/{id}/sort-to-ship")
-    public Response sortProductToShip(@PathParam("id") int id) {
-        Product product = productService.getById(id);
-        if (product == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        productService.sortToShip(product);
-        return Response.ok().build();
-    }
-
-    @PUT
-    @Path("/{id}/set-priority")
-    public Response setProductPriority(@PathParam("id") int id, Product product) {
-        Product existingProduct = productService.getById(id);
-        if (existingProduct == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        productService.setPriority(product);
-        return Response.ok().build();
+        productService.setPriority(product, priority);
+        return Response.ok(product).build();
     }
 }

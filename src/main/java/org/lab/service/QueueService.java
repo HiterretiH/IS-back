@@ -2,8 +2,11 @@ package org.lab.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import org.lab.model.Product;
+import org.lab.model.ProductState;
 import org.lab.model.Queue;
 import org.lab.model.SortingStation;
+import org.lab.repository.ProductRepository;
 import org.lab.repository.QueueRepository;
 
 import java.util.List;
@@ -12,6 +15,9 @@ import java.util.List;
 public class QueueService {
     @Inject
     private QueueRepository queueRepository;
+
+    @Inject
+    private ProductRepository productRepository;
 
     public List<Queue> getAll() {
         return queueRepository.findAll();
@@ -25,13 +31,9 @@ public class QueueService {
         queueRepository.save(queue);
     }
 
+    public void update(Queue queue) {queueRepository.update(queue);}
+
     public void delete(Queue queue) {
         queueRepository.delete(queue.getId());
     }
-
-    public void setSortingStation(SortingStation sortingStation) {}
-    public void getAllProducts(Queue queue) {}
-
-    // Остановить обработку продуктов, вернуть на склад
-    public void interrupt(Queue queue) {}
 }

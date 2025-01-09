@@ -16,6 +16,14 @@ public class Queue {
     @JoinColumn(name = "station_id", nullable = false)
     private SortingStation sortingStation;
 
+    public SortingStation getSortingStation() {
+        return sortingStation;
+    }
+
+    public void setSortingStation(SortingStation sortingStation) {
+        this.sortingStation = sortingStation;
+    }
+
     public Integer getId() {
         return id;
     }

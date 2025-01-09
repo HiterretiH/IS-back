@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @NameBinding
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface AdminOnly {
+public @interface ManagerOrAllowedOperator {
 }

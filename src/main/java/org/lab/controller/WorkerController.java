@@ -47,17 +47,17 @@ public class WorkerController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         workerService.delete(worker);
-        return Response.noContent().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PUT
+    @POST
     @Path("/{id}/fire")
     public Response fireWorker(@PathParam("id") int id) {
         Worker worker = workerService.getById(id);
         if (worker == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        workerService.fire(null);
-        return Response.ok().build();
+        workerService.fire(worker);
+        return Response.ok("Worker fired").build();
     }
 }

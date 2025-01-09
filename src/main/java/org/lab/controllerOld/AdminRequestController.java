@@ -2,7 +2,7 @@ package org.lab.controllerOld;
 
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
-import org.lab.annotations.AdminOnly;
+import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -36,7 +36,7 @@ public class AdminRequestController {
     @GET
     @Path("/pending")
     @Secured
-    @AdminOnly
+    @ManagerOnly
     public Response getPendingRequests() {
         List<AdminRequest> pendingRequests = adminRequestService.getPendingRequests();
         return Response.ok(pendingRequests).build();
@@ -45,7 +45,7 @@ public class AdminRequestController {
     @POST
     @Path("/{requestId}/approve")
     @Secured
-    @AdminOnly
+    @ManagerOnly
     public Response approveRequest(@PathParam("requestId") Integer requestId) {
         try {
             adminRequestService.approveRequest(requestId);
@@ -58,7 +58,7 @@ public class AdminRequestController {
     @POST
     @Path("/{requestId}/reject")
     @Secured
-    @AdminOnly
+    @ManagerOnly
     public Response rejectRequest(@PathParam("requestId") Integer requestId) {
         try {
             adminRequestService.rejectRequest(requestId);

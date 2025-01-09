@@ -8,7 +8,7 @@ import jakarta.ws.rs.container.ResourceInfo;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import org.lab.annotations.AdminOnly;
+import org.lab.annotations.ManagerOnly;
 import org.lab.model.Role;
 import org.lab.model.User;
 
@@ -16,7 +16,7 @@ import java.lang.annotation.Annotation;
 
 @Provider
 @Priority(Priorities.AUTHORIZATION)
-public class AdminOnlyFilter implements ContainerRequestFilter {
+public class ManagerOnlyFilter implements ContainerRequestFilter {
 
     @Context
     ResourceInfo resourceInfo;
@@ -26,7 +26,7 @@ public class AdminOnlyFilter implements ContainerRequestFilter {
         boolean isAdminOnly = false;
 
         for (Annotation annotation : resourceInfo.getResourceMethod().getAnnotations()) {
-            if (AdminOnly.class.isAssignableFrom(annotation.annotationType())) {
+            if (ManagerOnly.class.isAssignableFrom(annotation.annotationType())) {
                 isAdminOnly = true;
                 break;
             }

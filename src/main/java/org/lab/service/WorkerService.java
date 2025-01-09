@@ -2,7 +2,7 @@ package org.lab.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import org.lab.model.WarehouseOperator;
+import org.lab.model.Status;
 import org.lab.model.Worker;
 import org.lab.repository.WorkerRepository;
 
@@ -21,5 +21,7 @@ public class WorkerService {
 
     public void delete(Worker worker) {workerRepository.delete(worker.getId());}
 
-    public void fire(WarehouseOperator warehouseOperator) {}
+    public void fire(Worker worker) {
+        worker.setStatus(Status.FIRED);
+    }
 }

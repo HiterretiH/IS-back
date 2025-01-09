@@ -116,6 +116,15 @@ public class Product {
         this.productState = productState;
     }
 
+    public Queue getQueue() {
+        return queue;
+    }
+
+    public void setQueue(Queue queue) {
+        this.queue = queue;
+    }
+
+
     public Integer getPriority() {
         return priority;
     }

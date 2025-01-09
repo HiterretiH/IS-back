@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.model.Manager;
+import org.lab.model.User;
 import org.lab.service.ManagerService;
 
 import java.util.List;
@@ -40,14 +41,14 @@ public class ManagerController {
     }
 
     @PUT
-    @Path("/{id}/reassign")
-    public Response reassignManager(@PathParam("id") int id, Manager manager) {
+    @Path("/{id}")
+    public Response updateManager(@PathParam("id") int id, Manager manager) {
         Manager existingManager = managerService.getById(id);
         if (existingManager == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        manager.setId(id);
-        managerService.reassign(manager);
+        manager.setId(id); // Ensure the correct ID is set
+        managerService.update(manager);
         return Response.ok(manager).build();
     }
 
@@ -59,6 +60,17 @@ public class ManagerController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         managerService.delete(manager);
-        return Response.noContent().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @PUT
+    @Path("/{id}/reassign")
+    public Response reassignManager(@PathParam("id") int id, User user) {
+        Manager manager = managerService.getById(id);
+        if (manager == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        managerService.reassign(manager, user);
+        return Response.ok(manager).build();
     }
 }

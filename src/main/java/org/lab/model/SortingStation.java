@@ -21,7 +21,7 @@ public class SortingStation {
     private Integer capacity;
 
     @Column(nullable = false)
-    private Integer performance;
+    private Integer sortTimeSeconds;
 
     public Integer getId() {
         return id;
@@ -55,11 +55,11 @@ public class SortingStation {
         this.capacity = capacity;
     }
 
-    public Integer getPerformance() {
-        return performance;
+    public Integer getSortTimeSeconds() {
+        return sortTimeSeconds;
     }
 
-    public void setPerformance(Integer performance) {
-        this.performance = performance;
+    public void setSortTimeSeconds(Integer performance) {
+        this.sortTimeSeconds = performance;
     }
 }

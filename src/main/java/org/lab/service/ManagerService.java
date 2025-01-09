@@ -2,7 +2,9 @@ package org.lab.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.lab.model.Manager;
+import org.lab.model.User;
 import org.lab.repository.ManagerRepository;
 
 import java.util.List;
@@ -24,12 +26,18 @@ public class ManagerService {
         managerRepository.save(manager);
     }
 
+    public void update(Manager manager) {
+        managerRepository.update(manager);
+    }
+
     public void delete(Manager manager) {
         managerRepository.delete(manager.getId());
     }
 
     // Передать позицию менеджера другому пользователю, снимая себя с должности
-    public void reassign(Manager manager) {
-        managerRepository.update(manager);
+    @Transactional
+    public void reassign(Manager manager, User user) {
+        manager.setAppUser(user);
+        this.update(manager);
     }
 }

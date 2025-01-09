@@ -7,7 +7,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.lab.annotations.AdminOrAllowedOperator;
+import org.lab.annotations.ManagerOrAllowedOperator;
 import org.lab.annotations.Secured;
 import org.lab.model.*;
 import org.lab.utils.ExceptionHandler;
@@ -73,7 +73,7 @@ public class WorkerController {
     @PUT
     @Path("/{id}")
     @Secured
-    @AdminOrAllowedOperator
+    @ManagerOrAllowedOperator
     public Response updateWorker(@PathParam("id") Integer id, Worker worker) {
         try {
             User user = (User) httpServletRequest.getAttribute("currentUser");
@@ -92,7 +92,7 @@ public class WorkerController {
     @DELETE
     @Path("/{id}")
     @Secured
-    @AdminOrAllowedOperator
+    @ManagerOrAllowedOperator
     public Response deleteWorker(@PathParam("id") Integer id) {
         try {
             workerService.deleteWorker(id);

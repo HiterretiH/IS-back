@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.model.User;
+import org.lab.model.WarehouseOperator;
 import org.lab.service.UserService;
 
 import java.util.List;

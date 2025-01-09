@@ -2,11 +2,14 @@ package org.lab.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
-import org.lab.model.OperatorRequest;
-import org.lab.model.SortingRequest;
+import jakarta.transaction.Transactional;
+import org.lab.model.*;
 import org.lab.repository.SortingRequestRepository;
+import org.lab.repository.WarehouseOperatorRepository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class SortingRequestService {
@@ -30,5 +33,29 @@ public class SortingRequestService {
     }
 
     // Отказаться от заявки, система автоматически перераспределяет заявку
-    public void reject(SortingRequest sortingRequest) {}
+    @Transactional
+    public void reject(SortingRequest sortingRequest) {
+        List<SortingRequest> requests = sortingRequestRepository.findAll();
+
+        Map<User, Integer> operatorRequestCountMap = new HashMap<>();
+
+        for (SortingRequest request : requests) {
+            User operator = request.getOperator();
+            if (operator.getRole() != Role.MANAGER)
+                operatorRequestCountMap.put(operator, operatorRequestCountMap.getOrDefault(operator, 0) + 1);
+        }
+
+        User leastBusyOperator = null;
+        int minRequests = Integer.MAX_VALUE;
+
+        for (Map.Entry<User, Integer> entry : operatorRequestCountMap.entrySet()) {
+            if (entry.getValue() < minRequests) {
+                minRequests = entry.getValue();
+                leastBusyOperator = entry.getKey();
+            }
+        }
+
+        sortingRequest.setOperator(leastBusyOperator);
+        sortingRequestRepository.update(sortingRequest);
+    }
 }

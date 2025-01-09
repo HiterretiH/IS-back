@@ -9,23 +9,21 @@ import jakarta.ws.rs.container.ResourceInfo;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.Provider;
-import org.lab.annotations.AdminOrAllowedOperator;
+import org.lab.annotations.ManagerOrAllowedOperator;
 import org.lab.model.*;
+import org.lab.repository.WarehouseOperatorRepository;
 import org.lab.service.ProductService;
-import org.lab.service.WarehouseOperatorService;
-
 import java.lang.annotation.Annotation;
-import java.util.List;
 
 @Provider
 @Priority(Priorities.AUTHORIZATION)
-public class AdminOrAllowedOperatorFilter implements ContainerRequestFilter {
+public class ManagerOrAllowedOperatorFilter implements ContainerRequestFilter {
 
     @Context
     ResourceInfo resourceInfo;
 
     @Inject
-    WarehouseOperatorService warehouseOperatorService;
+    WarehouseOperatorRepository warehouseOperatorRepository;
 
     @Inject
     ProductService productService;
@@ -35,7 +33,7 @@ public class AdminOrAllowedOperatorFilter implements ContainerRequestFilter {
         boolean isAdminOrAllowedOperator = false;
 
         for (Annotation annotation : resourceInfo.getResourceMethod().getAnnotations()) {
-            if (AdminOrAllowedOperator.class.isAssignableFrom(annotation.annotationType())) {
+            if (ManagerOrAllowedOperator.class.isAssignableFrom(annotation.annotationType())) {
                 isAdminOrAllowedOperator = true;
                 break;
             }
@@ -56,9 +54,9 @@ public class AdminOrAllowedOperatorFilter implements ContainerRequestFilter {
 
             ProductType productType = product.getProductType();
 
-            WarehouseOperator warehouseOperator = warehouseOperatorService.getByUser(user);
+            WarehouseOperator warehouseOperator = warehouseOperatorRepository.findByUserId(user.getId());
 
-            if (warehouseOperator.getProductType() != productType || !user.getRole().equals(Role.MANAGER)) {
+            if (warehouseOperator == null || (warehouseOperator.getProductType() != productType && !user.getRole().equals(Role.MANAGER))) {
                 requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("User not authorized to modify this product").build());
             }
         }

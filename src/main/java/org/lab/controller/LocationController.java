@@ -46,7 +46,7 @@ public class LocationController {
         if (existingLocation == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        location.setId(id);
+        location.setId(id); // Ensure the correct ID is set
         locationService.update(location);
         return Response.ok(location).build();
     }
@@ -59,6 +59,6 @@ public class LocationController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         locationService.delete(location);
-        return Response.noContent().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

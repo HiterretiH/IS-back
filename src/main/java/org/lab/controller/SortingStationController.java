@@ -47,6 +47,17 @@ public class SortingStationController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         sortingStationService.delete(sortingStation);
-        return Response.noContent().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
+    }
+
+    @POST
+    @Path("/{id}/simulate-sort")
+    public Response simulateSort(@PathParam("id") int id) {
+        SortingStation sortingStation = sortingStationService.getById(id);
+        if (sortingStation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        sortingStationService.simulateSort(sortingStation);
+        return Response.ok("Sorting simulation completed for station: " + sortingStation.getId()).build();
     }
 }

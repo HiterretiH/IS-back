@@ -39,6 +39,18 @@ public class OperatorRequestController {
         return Response.status(Response.Status.CREATED).entity(operatorRequest).build();
     }
 
+    @PUT
+    @Path("/{id}")
+    public Response updateOperatorRequest(@PathParam("id") int id, OperatorRequest operatorRequest) {
+        OperatorRequest existingRequest = operatorRequestService.getById(id);
+        if (existingRequest == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        operatorRequest.setId(id); // Ensure correct ID is set
+        operatorRequestService.update(operatorRequest);
+        return Response.ok(operatorRequest).build();
+    }
+
     @DELETE
     @Path("/{id}")
     public Response deleteOperatorRequest(@PathParam("id") int id) {
@@ -47,14 +59,14 @@ public class OperatorRequestController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         operatorRequestService.delete(operatorRequest);
-        return Response.noContent().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @GET
     @Path("/pending")
     public Response getAllPendingOperatorRequests() {
-        operatorRequestService.getAllPending();
-        return Response.ok().build();
+        List<OperatorRequest> pendingRequests = operatorRequestService.getAllPending();
+        return Response.ok(pendingRequests).build();
     }
 
     @PUT
@@ -65,7 +77,7 @@ public class OperatorRequestController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         operatorRequestService.approve(operatorRequest);
-        return Response.ok().build();
+        return Response.ok(operatorRequest).build();
     }
 
     @PUT
@@ -76,6 +88,6 @@ public class OperatorRequestController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         operatorRequestService.reject(operatorRequest);
-        return Response.ok().build();
+        return Response.ok(operatorRequest).build();
     }
 }

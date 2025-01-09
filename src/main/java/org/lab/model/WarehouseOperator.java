@@ -40,6 +40,17 @@ public class WarehouseOperator {
     public ProductType getProductType() {
         return productType;
     }
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public void setAppUser(User appUser) {
         this.appUser = appUser;

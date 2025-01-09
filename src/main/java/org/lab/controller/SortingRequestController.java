@@ -47,7 +47,7 @@ public class SortingRequestController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         sortingRequestService.delete(sortingRequest);
-        return Response.noContent().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
     @PUT
@@ -58,6 +58,6 @@ public class SortingRequestController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         sortingRequestService.reject(sortingRequest);
-        return Response.ok().build();
+        return Response.ok(sortingRequest).build();
     }
 }

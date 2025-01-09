@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.model.ProductType;
 import org.lab.model.WarehouseOperator;
 import org.lab.service.WarehouseOperatorService;
 
@@ -47,10 +48,10 @@ public class WarehouseOperatorController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         warehouseOperatorService.delete(warehouseOperator);
-        return Response.noContent().build();
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 
-    @PUT
+    @POST
     @Path("/{id}/fire")
     public Response fireWarehouseOperator(@PathParam("id") int id) {
         WarehouseOperator warehouseOperator = warehouseOperatorService.getById(id);
@@ -58,17 +59,17 @@ public class WarehouseOperatorController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         warehouseOperatorService.fire(warehouseOperator);
-        return Response.ok().build();
+        return Response.ok("Warehouse operator fired").build();
     }
 
-    @PUT
+    @POST
     @Path("/{id}/assign-product-type")
-    public Response assignProductType(@PathParam("id") int id) {
+    public Response assignProductTypeToOperator(@PathParam("id") int id, ProductType productType) {
         WarehouseOperator warehouseOperator = warehouseOperatorService.getById(id);
         if (warehouseOperator == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        warehouseOperatorService.assignProductType(warehouseOperator);
-        return Response.ok().build();
+        warehouseOperatorService.assignProductType(warehouseOperator, productType);
+        return Response.ok("Product type assigned to warehouse operator").build();
     }
 }

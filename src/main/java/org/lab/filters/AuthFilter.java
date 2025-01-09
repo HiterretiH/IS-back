@@ -20,9 +20,6 @@ import java.lang.annotation.Annotation;
 @Priority(Priorities.AUTHENTICATION)
 public class AuthFilter implements ContainerRequestFilter {
 
-    @Inject
-    UserService userService;
-
     @Context
     ResourceInfo resourceInfo;
 

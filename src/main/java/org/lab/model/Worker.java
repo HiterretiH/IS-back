@@ -53,6 +53,14 @@ public class Worker {
         this.lastName = lastName;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public String getMiddleName() {
         return middleName;
     }
