@@ -4,6 +4,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.ProductType;
 import org.lab.service.ProductTypeService;
 
@@ -17,12 +19,14 @@ public class ProductTypeController {
     @Inject
     private ProductTypeService productTypeService;
 
+    @Secured
     @GET
     public Response getAllProductTypes() {
         List<ProductType> productTypes = productTypeService.getAll();
         return Response.ok(productTypes).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getProductTypeById(@PathParam("id") int id) {
@@ -33,12 +37,16 @@ public class ProductTypeController {
         return Response.ok(productType).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     public Response createProductType(ProductType productType) {
         productTypeService.create(productType);
         return Response.status(Response.Status.CREATED).entity(productType).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteProductType(@PathParam("id") int id) {

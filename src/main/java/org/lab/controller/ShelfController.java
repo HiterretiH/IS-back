@@ -4,6 +4,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.Shelf;
 import org.lab.service.ShelfService;
 
@@ -17,12 +19,14 @@ public class ShelfController {
     @Inject
     private ShelfService shelfService;
 
+    @Secured
     @GET
     public Response getAllShelves() {
         List<Shelf> shelves = shelfService.getAll();
         return Response.ok(shelves).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getShelfById(@PathParam("id") int id) {
@@ -33,12 +37,16 @@ public class ShelfController {
         return Response.ok(shelf).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     public Response createShelf(Shelf shelf) {
         shelfService.create(shelf);
         return Response.status(Response.Status.CREATED).entity(shelf).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteShelf(@PathParam("id") int id) {

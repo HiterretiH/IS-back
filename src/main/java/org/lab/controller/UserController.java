@@ -4,9 +4,10 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.Role;
 import org.lab.model.User;
-import org.lab.model.WarehouseOperator;
 import org.lab.service.UserService;
 
 import java.util.List;
@@ -40,6 +41,7 @@ public class UserController {
         return Response.ok(token).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getUserById(@PathParam("id") Integer id) {
@@ -50,12 +52,15 @@ public class UserController {
         return Response.ok(user).build();
     }
 
+    @Secured
     @GET
     public Response getAllUsers() {
         List<User> users = userService.getAll();
         return Response.ok(users).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteUser(@PathParam("id") Integer id) {

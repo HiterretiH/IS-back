@@ -4,6 +4,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.ProductType;
 import org.lab.model.WarehouseOperator;
 import org.lab.service.WarehouseOperatorService;
@@ -18,12 +20,14 @@ public class WarehouseOperatorController {
     @Inject
     private WarehouseOperatorService warehouseOperatorService;
 
+    @Secured
     @GET
     public Response getAllWarehouseOperators() {
         List<WarehouseOperator> warehouseOperators = warehouseOperatorService.getAll();
         return Response.ok(warehouseOperators).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getWarehouseOperatorById(@PathParam("id") int id) {
@@ -34,12 +38,16 @@ public class WarehouseOperatorController {
         return Response.ok(warehouseOperator).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     public Response createWarehouseOperator(WarehouseOperator warehouseOperator) {
         warehouseOperatorService.create(warehouseOperator);
         return Response.status(Response.Status.CREATED).entity(warehouseOperator).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteWarehouseOperator(@PathParam("id") int id) {
@@ -51,6 +59,8 @@ public class WarehouseOperatorController {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     @Path("/{id}/fire")
     public Response fireWarehouseOperator(@PathParam("id") int id) {
@@ -62,6 +72,8 @@ public class WarehouseOperatorController {
         return Response.ok("Warehouse operator fired").build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     @Path("/{id}/assign-product-type")
     public Response assignProductTypeToOperator(@PathParam("id") int id, ProductType productType) {

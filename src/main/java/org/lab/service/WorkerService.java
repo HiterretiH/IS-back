@@ -21,6 +21,14 @@ public class WorkerService {
 
     public void delete(Worker worker) {workerRepository.delete(worker.getId());}
 
+    public void hire(Worker worker) {
+        worker.setStatus(Status.HIRED);
+    }
+
+    public void reject(Worker worker) {
+        worker.setStatus(Status.REJECTED);
+    }
+
     public void fire(Worker worker) {
         worker.setStatus(Status.FIRED);
     }

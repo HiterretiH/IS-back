@@ -4,8 +4,9 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.Queue;
-import org.lab.model.SortingStation;
 import org.lab.service.QueueService;
 
 import java.util.List;
@@ -18,12 +19,14 @@ public class QueueController {
     @Inject
     private QueueService queueService;
 
+    @Secured
     @GET
     public Response getAllQueues() {
         List<Queue> queues = queueService.getAll();
         return Response.ok(queues).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getQueueById(@PathParam("id") int id) {
@@ -34,12 +37,16 @@ public class QueueController {
         return Response.ok(queue).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     public Response createQueue(Queue queue) {
         queueService.create(queue);
         return Response.status(Response.Status.CREATED).entity(queue).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteQueue(@PathParam("id") int id) {

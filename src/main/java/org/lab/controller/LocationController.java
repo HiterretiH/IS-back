@@ -4,6 +4,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.Location;
 import org.lab.service.LocationService;
 
@@ -17,12 +19,14 @@ public class LocationController {
     @Inject
     private LocationService locationService;
 
+    @Secured
     @GET
     public Response getAllLocations() {
         List<Location> locations = locationService.getAll();
         return Response.ok(locations).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getLocationById(@PathParam("id") int id) {
@@ -33,12 +37,16 @@ public class LocationController {
         return Response.ok(location).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     public Response createLocation(Location location) {
         locationService.create(location);
         return Response.status(Response.Status.CREATED).entity(location).build();
     }
 
+    @Secured
+    @ManagerOnly
     @PUT
     @Path("/{id}")
     public Response updateLocation(@PathParam("id") int id, Location location) {
@@ -51,6 +59,8 @@ public class LocationController {
         return Response.ok(location).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteLocation(@PathParam("id") int id) {

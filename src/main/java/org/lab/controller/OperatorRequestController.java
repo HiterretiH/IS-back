@@ -4,6 +4,8 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.OperatorRequest;
 import org.lab.service.OperatorRequestService;
 
@@ -17,12 +19,14 @@ public class OperatorRequestController {
     @Inject
     private OperatorRequestService operatorRequestService;
 
+    @Secured
     @GET
     public Response getAllOperatorRequests() {
         List<OperatorRequest> operatorRequests = operatorRequestService.getAll();
         return Response.ok(operatorRequests).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getOperatorRequestById(@PathParam("id") int id) {
@@ -33,12 +37,16 @@ public class OperatorRequestController {
         return Response.ok(operatorRequest).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     public Response createOperatorRequest(OperatorRequest operatorRequest) {
         operatorRequestService.create(operatorRequest);
         return Response.status(Response.Status.CREATED).entity(operatorRequest).build();
     }
 
+    @Secured
+    @ManagerOnly
     @PUT
     @Path("/{id}")
     public Response updateOperatorRequest(@PathParam("id") int id, OperatorRequest operatorRequest) {
@@ -51,6 +59,8 @@ public class OperatorRequestController {
         return Response.ok(operatorRequest).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteOperatorRequest(@PathParam("id") int id) {
@@ -62,6 +72,7 @@ public class OperatorRequestController {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @Secured
     @GET
     @Path("/pending")
     public Response getAllPendingOperatorRequests() {
@@ -69,6 +80,8 @@ public class OperatorRequestController {
         return Response.ok(pendingRequests).build();
     }
 
+    @Secured
+    @ManagerOnly
     @PUT
     @Path("/{id}/approve")
     public Response approveOperatorRequest(@PathParam("id") int id) {
@@ -80,6 +93,8 @@ public class OperatorRequestController {
         return Response.ok(operatorRequest).build();
     }
 
+    @Secured
+    @ManagerOnly
     @PUT
     @Path("/{id}/reject")
     public Response rejectOperatorRequest(@PathParam("id") int id) {
