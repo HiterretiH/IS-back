@@ -50,37 +50,4 @@ public class QueueController {
         queueService.delete(queue);
         return Response.noContent().build();
     }
-
-    @PUT
-    @Path("/{id}/set-sorting-station")
-    public Response setSortingStation(@PathParam("id") int id, SortingStation sortingStation) {
-        Queue queue = queueService.getById(id);
-        if (queue == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        queueService.setSortingStation(sortingStation);
-        return Response.ok().build();
-    }
-
-    @GET
-    @Path("/{id}/products")
-    public Response getAllProductsInQueue(@PathParam("id") int id) {
-        Queue queue = queueService.getById(id);
-        if (queue == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        queueService.getAllProducts(queue);
-        return Response.ok().build();
-    }
-
-    @PUT
-    @Path("/{id}/interrupt")
-    public Response interruptQueue(@PathParam("id") int id) {
-        Queue queue = queueService.getById(id);
-        if (queue == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        queueService.interrupt(queue);
-        return Response.ok().build();
-    }
 }
