@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.lab</groupId>
-    <artifactId>info-systems-lab-1</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>info-systems-lab-1</name>
+    <artifactId>info-systems-back</artifactId>
+    <version>1.0</version>
+    <name>info-systems-back</name>
     <packaging>war</packaging>
 
     <properties>
