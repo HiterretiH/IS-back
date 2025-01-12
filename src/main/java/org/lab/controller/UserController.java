@@ -30,6 +30,10 @@ public class UserController {
             return ModelValidator.getValidationErrorResponse();
         }
 
+        if (userService.getByUsername(user.getUsername()) != null) {
+            return Response.status(Response.Status.CONFLICT).entity("User with given username already exists").build();
+        }
+
         String token = userService.register(user);
         if (token == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Registration failed").build();
