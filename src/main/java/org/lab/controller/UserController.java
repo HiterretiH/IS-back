@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.Role;
 import org.lab.model.User;
+import org.lab.service.Token;
 import org.lab.service.UserService;
 import org.lab.validation.ModelValidator;
 
@@ -34,8 +35,8 @@ public class UserController {
             return Response.status(Response.Status.CONFLICT).entity("User with given username already exists").build();
         }
 
-        String token = userService.register(user);
-        if (token == null) {
+        Token token = userService.register(user);
+        if (token.getToken() == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Registration failed").build();
         }
         return Response.status(Response.Status.CREATED).entity(token).build();
@@ -44,8 +45,8 @@ public class UserController {
     @POST
     @Path("/login")
     public Response login(User user) {
-        String token = userService.login(user);
-        if (token == null) {
+        Token token = userService.login(user);
+        if (token.getToken() == null) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid credentials").build();
         }
         return Response.ok(token).build();

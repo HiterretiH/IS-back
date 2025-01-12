@@ -15,14 +15,14 @@ public class UserService {
     @Inject
     private UserRepository userRepository;
 
-    public String register(User user) {
+    public Token register(User user) {
         user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
         User createdUser = userRepository.save(user);
         return JwtUtils.generateToken(createdUser);
     }
 
 
-    public String login(User user) {
+    public Token login(User user) {
         User existingUser = userRepository.findByUsername(user.getUsername());
         if (existingUser != null && existingUser.getPassword().equals(PasswordUtils.hashPassword(user.getPassword()))) {
             return JwtUtils.generateToken(existingUser);
