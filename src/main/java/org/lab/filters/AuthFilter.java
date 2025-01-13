@@ -10,6 +10,7 @@ import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.Secured;
+import org.lab.model.Role;
 import org.lab.model.User;
 import org.lab.utils.JwtUtils;
 
@@ -39,6 +40,13 @@ public class AuthFilter implements ContainerRequestFilter {
             if (user == null || !JwtUtils.validateToken(authHeader, user)) {
                 requestContext.abortWith(
                         Response.status(Response.Status.UNAUTHORIZED).entity("User not authorized").build()
+                );
+                return;
+            }
+
+            if (user.getRole() == null || user.getRole() == Role.PENDING) {
+                requestContext.abortWith(
+                        Response.status(Response.Status.UNAUTHORIZED).entity("User not approved").build()
                 );
                 return;
             }
