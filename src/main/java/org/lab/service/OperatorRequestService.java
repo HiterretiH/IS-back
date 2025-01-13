@@ -60,6 +60,7 @@ public class OperatorRequestService {
     }
 
     public OperatorRequest getByUsername(String username) {
-        return operatorRequestRepository.getByUsername(username);
+        User user = userRepository.findByUsername(username);
+        return operatorRequestRepository.getByOperatorId(user.getId());
     }
 }

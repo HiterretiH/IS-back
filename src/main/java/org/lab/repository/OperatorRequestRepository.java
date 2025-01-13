@@ -19,9 +19,9 @@ public class OperatorRequestRepository extends GenericRepository<OperatorRequest
         return query.getResultList();
     }
 
-    public OperatorRequest getByUsername(String username) {
+    public OperatorRequest getByOperatorId(int operatorId) {
         Query query = entityManager.createNativeQuery(
-                "SELECT * FROM operator_request WHERE status='PENDING' AND username = :username", OperatorRequest.class);
+                "SELECT * FROM operator_request WHERE operator_id = :operatorId", OperatorRequest.class).setParameter("operatorId", operatorId);
         return (OperatorRequest) query.getSingleResult();
     }
 }
