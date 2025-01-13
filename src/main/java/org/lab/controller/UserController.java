@@ -1,7 +1,9 @@
 package org.lab.controller;
 
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
@@ -27,6 +29,9 @@ public class UserController {
 
     @Inject
     private OperatorRequestService operatorRequestService;
+
+    @Context
+    private HttpServletRequest httpServletRequest;
 
     @POST
     @Path("/register")
@@ -93,5 +98,20 @@ public class UserController {
         }
         userService.delete(id);
         return Response.noContent().build();
+    }
+
+    @GET
+    @Secured
+    @Path("/me")
+    public Response me() {
+        User currentUser = (User) httpServletRequest.getAttribute("currentUser");
+        if (currentUser == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        User user = userService.getById(currentUser.getId());
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(user).build();
     }
 }
