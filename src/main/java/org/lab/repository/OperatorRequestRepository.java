@@ -15,13 +15,14 @@ public class OperatorRequestRepository extends GenericRepository<OperatorRequest
 
     public List<OperatorRequest> findAllPending() {
         Query query = entityManager.createNativeQuery(
-                "SELECT * FROM operator_request WHERE status='PENDING'", OperatorRequest.class);
+                "SELECT * FROM find_all_pending_operator_requests()", OperatorRequest.class);
         return query.getResultList();
     }
 
     public OperatorRequest getByOperatorId(int operatorId) {
         Query query = entityManager.createNativeQuery(
-                "SELECT * FROM operator_request WHERE operator_id = :operatorId", OperatorRequest.class).setParameter("operatorId", operatorId);
+                        "SELECT * FROM get_operator_request_by_operator_id(:operatorId)", OperatorRequest.class)
+                .setParameter("operatorId", operatorId);
         return (OperatorRequest) query.getSingleResult();
     }
 }
