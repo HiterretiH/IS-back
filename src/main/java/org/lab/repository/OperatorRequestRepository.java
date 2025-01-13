@@ -1,7 +1,6 @@
 package org.lab.repository;
 
 import jakarta.ejb.Stateless;
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.lab.model.OperatorRequest;
 
@@ -16,7 +15,13 @@ public class OperatorRequestRepository extends GenericRepository<OperatorRequest
 
     public List<OperatorRequest> findAllPending() {
         Query query = entityManager.createNativeQuery(
-                "SELECT * FROM find_all_pending_operator_requests()", OperatorRequest.class);
+                "SELECT * FROM operator_request WHERE status='PENDING'", OperatorRequest.class);
         return query.getResultList();
+    }
+
+    public OperatorRequest getByUsername(String username) {
+        Query query = entityManager.createNativeQuery(
+                "SELECT * FROM operator_request WHERE status='PENDING' AND username = :username", OperatorRequest.class);
+        return (OperatorRequest) query.getSingleResult();
     }
 }

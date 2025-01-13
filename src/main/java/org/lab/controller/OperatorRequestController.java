@@ -115,4 +115,18 @@ public class OperatorRequestController {
         operatorRequestService.reject(operatorRequest);
         return Response.ok(operatorRequest).build();
     }
+
+    @Secured
+    @GET
+    @Path("/by-username")
+    public Response getOperatorRequestsByUsername(@QueryParam("username") String username) {
+        if (username == null || username.trim().isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Username is required").build();
+        }
+        OperatorRequest operatorRequest = operatorRequestService.getByUsername(username);
+        if (operatorRequest == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(operatorRequest).build();
+    }
 }

@@ -6,8 +6,11 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
+import org.lab.model.OperatorRequest;
+import org.lab.model.RequestState;
 import org.lab.model.Role;
 import org.lab.model.User;
+import org.lab.service.OperatorRequestService;
 import org.lab.service.Token;
 import org.lab.service.UserService;
 import org.lab.validation.ModelValidator;
@@ -22,10 +25,13 @@ public class UserController {
     @Inject
     private UserService userService;
 
+    @Inject
+    private OperatorRequestService operatorRequestService;
+
     @POST
     @Path("/register")
     public Response register(User user) {
-        user.setRole(Role.OPERATOR);
+        user.setRole(Role.PENDING);
 
         if (!ModelValidator.validate(user)) {
             return ModelValidator.getValidationErrorResponse();
@@ -39,6 +45,12 @@ public class UserController {
         if (token.getToken() == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Registration failed").build();
         }
+
+        OperatorRequest operatorRequest = new OperatorRequest();
+        operatorRequest.setOperator(user);
+        operatorRequest.setStatus(RequestState.PENDING);
+        operatorRequestService.create(operatorRequest);
+
         return Response.status(Response.Status.CREATED).entity(token).build();
     }
 
