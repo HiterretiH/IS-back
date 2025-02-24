@@ -4,27 +4,11 @@ SELECT
 FROM
     generate_series(1, 100000) i;
 
-INSERT INTO App_User (username, password_hash, role)
+INSERT INTO Worker (first_name, last_name, birth_date, hire_date, warehouse_id)
 SELECT
-    'User #' || i, 'Password #' || i*10, 'manager'
+    'Worker #' || i, 'Last name #' || i, '2000-01-01', CURRENT_DATE, (i-1)/10 + 1
 FROM
     generate_series(1, 1000000) i;
-
-INSERT INTO Worker (first_name, last_name, birth_date, hire_date)
-SELECT
-    'Worker #' || i, 'Last name #' || i, '2000-01-01', CURRENT_DATE
-FROM
-    generate_series(1, 1000000) i;
-
-INSERT INTO Manager (app_user_id, worker_id, warehouse_id)
-SELECT
-    app_user_id, worker_id, warehouse_id
-FROM
-    (SELECT
-         i AS app_user_id,
-         i AS worker_id,
-         i AS warehouse_id
-     FROM generate_series(1, 100000) i) AS temp;
 
 INSERT INTO Product_Type (name)
 SELECT
@@ -39,7 +23,7 @@ SELECT
     'Description for Location #' || i,
     i
 FROM
-    generate_series(1, 1000000) i;
+    generate_series(1, 2000000) i;
 
 -- Insert into Partners
 INSERT INTO Partners (name, email, phone_number, address)
@@ -57,17 +41,19 @@ SELECT
 FROM
     generate_series(1, 1000000) i;
 
-_
+INSERT INTO Sorting_Station (warehouse_id, location_id, capacity, sort_time_seconds)
+SELECT
+    (i-1) / 10 + 1 AS warehouse_id,
+    1000000 + i,
+    i,
+    5
+
+FROM
+    generate_series(1, 1000000) i;
 
 INSERT INTO Queue (capacity, sorting_station_id)
 SELECT
     i, i
-FROM
-    generate_series(1, 1000000) i;
-
-INSERT INTO Warehouse_Operator (app_user_id, worker_id)
-SELECT
-    i, i, 'Product type ' || i
 FROM
     generate_series(1, 1000000) i;
 
@@ -97,12 +83,5 @@ INSERT INTO Loaders_And_Shelves (worker_id, shelf_id)
 SELECT
     i,
     i
-FROM
-    generate_series(1, 1000000) i;
-
-INSERT INTO Operator_Request (operator_id, status)
-SELECT
-    i,
-    'pending'
 FROM
     generate_series(1, 1000000) i;

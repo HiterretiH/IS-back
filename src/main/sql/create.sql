@@ -1,4 +1,4 @@
-CREATE TYPE user_role AS ENUM ('manager', 'operator', 'worker');
+CREATE TYPE user_role AS ENUM ('manager', 'operator', 'user');
 
 
 CREATE TYPE product_state_type AS ENUM ('sorting_to_store', 'sorting_to_ship', 'stored', 'shipped', 'disposed');
@@ -13,17 +13,6 @@ CREATE TABLE App_User (
     password_hash VARCHAR(255) NOT NULL,
     role user_role NOT NULL
 );
-
-
-CREATE TABLE Worker (
-    id SERIAL PRIMARY KEY,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    middle_name VARCHAR(100),
-    birth_date DATE NOT NULL,
-    hire_date DATE NOT NULL DEFAULT CURRENT_DATE
-);
-
 
 CREATE TABLE Product_Type (
     id SERIAL PRIMARY KEY,
@@ -53,14 +42,15 @@ CREATE TABLE Warehouse (
     address TEXT NOT NULL
 );
 
-CREATE TABLE Manager (
-    id SERIAL PRIMARY KEY,
-    app_user_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
-    worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
-    warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE
+CREATE TABLE Worker (
+                        id SERIAL PRIMARY KEY,
+                        first_name VARCHAR(100) NOT NULL,
+                        last_name VARCHAR(100) NOT NULL,
+                        middle_name VARCHAR(100),
+                        birth_date DATE NOT NULL,
+                        hire_date DATE NOT NULL DEFAULT CURRENT_DATE,
+                        warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE
 );
-
-ALTER TABLE Warehouse ADD COLUMN manager_id INT REFERENCES Manager(id);
 
 CREATE TABLE Shelf (
                        id SERIAL PRIMARY KEY,
@@ -84,7 +74,6 @@ CREATE TABLE Queue (
 CREATE TABLE Warehouse_Operator (
                                     id SERIAL PRIMARY KEY,
                                     app_user_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
-                                    worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
                                     product_type_id INT REFERENCES Product_Type(id) ON DELETE CASCADE
 );
 

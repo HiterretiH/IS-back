@@ -21,7 +21,7 @@ public class UserService {
     public Map<String, String> register(User user) {
         user.setPassword(PasswordUtils.hashPassword(user.getPassword()));
         int numberOfUsers = userRepository.findAll().size();
-        user.setRole(numberOfUsers == 0 ? Role.MANAGER : Role.WORKER);
+        user.setRole(numberOfUsers == 0 ? Role.MANAGER : Role.USER);
         User createdUser = userRepository.save(user);
         String token = JwtUtils.generateToken(createdUser);
 
@@ -32,7 +32,6 @@ public class UserService {
         response.put("token", token);
         return response;
     }
-
 
     public Map<String, String> login(User user) {
         User existingUser = userRepository.findByUsername(user.getUsername());

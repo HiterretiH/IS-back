@@ -1,5 +1,5 @@
 package org.lab.model;
 
 public enum Role {
-    MANAGER, OPERATOR, WORKER
+    MANAGER, OPERATOR, USER
 }

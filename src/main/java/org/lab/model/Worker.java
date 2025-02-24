@@ -41,6 +41,11 @@ public class Worker {
     @NotNull
     private Status status;
 
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", nullable = false)
+    @NotNull
+    private Warehouse warehouse;
+
     public Integer getId() {
         return id;
     }
@@ -95,5 +100,13 @@ public class Worker {
 
     public void setHireDate(LocalDate hireDate) {
         this.hireDate = hireDate;
+    }
+
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
     }
 }

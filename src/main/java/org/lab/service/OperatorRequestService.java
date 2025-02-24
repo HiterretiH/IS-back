@@ -19,9 +19,6 @@ public class OperatorRequestService {
     @Inject
     private UserRepository userRepository;
 
-    @Inject
-    private UserRepository userRepository;
-
     public List<OperatorRequest> getAll() {
         return operatorRequestRepository.findAll();
     }
@@ -43,7 +40,7 @@ public class OperatorRequestService {
 
     public void update(OperatorRequest operatorRequest) {
         User user = operatorRequest.getOperator();
-        if (user.getRole() == Role.PENDING && operatorRequest.getStatus() == RequestState.ACCEPTED) {
+        if (user.getRole() == Role.USER && operatorRequest.getStatus() == RequestState.ACCEPTED) {
             user.setRole(Role.OPERATOR);
             userRepository.update(user);
         }

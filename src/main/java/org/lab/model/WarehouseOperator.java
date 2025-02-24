@@ -24,11 +24,6 @@ public class WarehouseOperator {
     @JoinColumn(name = "product_type")
     private ProductType productType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    @NotNull
-    private Status status;
-
     public Integer getId() {
         return id;
     }
@@ -46,14 +41,6 @@ public class WarehouseOperator {
     }
     public void setProductType(ProductType productType) {
         this.productType = productType;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 
     public void setAppUser(User appUser) {
