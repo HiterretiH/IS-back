@@ -8,6 +8,7 @@ import org.lab.model.Queue;
 import org.lab.model.SortingStation;
 import org.lab.repository.ProductRepository;
 import org.lab.repository.QueueRepository;
+import org.lab.utils.PaginatedResponse;
 
 import java.util.List;
 
@@ -19,8 +20,10 @@ public class QueueService {
     @Inject
     private ProductRepository productRepository;
 
-    public List<Queue> getAll() {
-        return queueRepository.findAll();
+    public PaginatedResponse<String> getAll(int page, int size) {
+        List<String> data = queueRepository.findWithPagination(page, size);
+        int count = queueRepository.count();
+        return new PaginatedResponse<>(data, count);
     }
 
     public Queue getById(int id) {

@@ -15,7 +15,7 @@ public class Queue {
     private Integer capacity;
 
     @ManyToOne
-    @JoinColumn(name = "station_id", nullable = false)
+    @JoinColumn(name = "sorting_station_id", nullable = false)
     @NotNull
     private SortingStation sortingStation;
 

@@ -12,6 +12,10 @@ DROP FUNCTION IF EXISTS get_product_types_paginated(INT,INT);
 DROP FUNCTION IF EXISTS get_product_types_count();
 DROP FUNCTION IF EXISTS get_products_paginated(INT,INT);
 DROP FUNCTION IF EXISTS get_products_count();
+DROP FUNCTION IF EXISTS get_queues_paginated(INT,INT);
+DROP FUNCTION IF EXISTS get_queues_count();
+DROP FUNCTION IF EXISTS get_sorting_stations_paginated(INT,INT);
+DROP FUNCTION IF EXISTS get_sorting_stations_count();
 
 -- Drop tables
 DROP TABLE IF EXISTS Operator_Request CASCADE;

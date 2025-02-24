@@ -203,7 +203,7 @@ CREATE OR REPLACE FUNCTION get_product_types_count()
 BEGIN
     RETURN (
         SELECT COUNT(*)
-        FROM product_type
+        FROM Product_Type
     );
 END;
 $$ LANGUAGE plpgsql;
@@ -236,7 +236,59 @@ CREATE OR REPLACE FUNCTION get_products_count()
 BEGIN
     RETURN (
         SELECT COUNT(*)
-        FROM product
+        FROM Product
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_queues_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+    RETURN QUERY
+        SELECT jsonb_build_object(
+                       'id', q.id,
+                       'capacity', q.capacity,
+                       'sorting_station_id', q.sorting_station_id
+               )
+        FROM Queue q
+        ORDER BY q.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_queues_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Queue
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_sorting_stations_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+    RETURN QUERY
+        SELECT jsonb_build_object(
+                       'id', s.id,
+                       'warehouse_id', s.warehouse_id,
+                       'location_id', s.location_id,
+                       'capacity', s.capacity,
+                       'sort_time_seconds', s.sort_time_seconds
+               )
+        FROM Sorting_Station s
+        ORDER BY s.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_sorting_stations_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Sorting_Station
     );
 END;
 $$ LANGUAGE plpgsql;

@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.SortingStation;
 import org.lab.service.SortingStationService;
+import org.lab.utils.PaginatedResponse;
 import org.lab.validation.ModelValidator;
 
 import java.util.List;
@@ -22,8 +23,11 @@ public class SortingStationController {
 
     @Secured
     @GET
-    public Response getAllSortingStations() {
-        List<SortingStation> stations = sortingStationService.getAll();
+    public Response getAllSortingStations(@QueryParam("page") int page, @QueryParam("size") int size) {
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
+
+        PaginatedResponse<String> stations = sortingStationService.getAll(page, size);
         return Response.ok(stations).build();
     }
 

@@ -10,6 +10,7 @@ import org.lab.model.SortingStation;
 import org.lab.repository.ProductRepository;
 import org.lab.repository.QueueRepository;
 import org.lab.repository.SortingStationRepository;
+import org.lab.utils.PaginatedResponse;
 
 import java.util.List;
 import java.util.Comparator;
@@ -25,8 +26,10 @@ public class SortingStationService {
     @Inject
     private ProductRepository productRepository;
 
-    public List<SortingStation> getAll() {
-        return sortingStationRepository.findAll();
+    public PaginatedResponse<String> getAll(int page, int size) {
+        List<String> data = sortingStationRepository.findWithPagination(page, size);
+        int count = sortingStationRepository.count();
+        return new PaginatedResponse<>(data, count);
     }
 
     public SortingStation getById(int id) {

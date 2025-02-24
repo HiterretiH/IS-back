@@ -53,13 +53,12 @@ FROM
 
 INSERT INTO Queue (capacity, sorting_station_id)
 SELECT
-    i, i
+    5, i
 FROM
     generate_series(1, 1000000) i;
 
-INSERT INTO Product (product_type_id, location_id, supplier, customer, queue_id, name, description, expiration_date, product_state, priority)
+INSERT INTO Product (product_type_id, location_id, supplier, customer, name, description, expiration_date, product_state, priority)
 SELECT
-    i,
     i,
     i,
     i,
