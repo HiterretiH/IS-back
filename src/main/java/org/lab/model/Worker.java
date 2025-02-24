@@ -1,6 +1,9 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 @Entity
@@ -11,22 +14,31 @@ public class Worker {
     private Integer id;
 
     @Column(nullable = false, length = 100)
+    @NotNull
+    @Size(max = 100)
     private String firstName;
 
     @Column(nullable = false, length = 100)
+    @NotNull
+    @Size(max = 100)
     private String lastName;
 
     @Column(length = 100)
+    @NotNull
+    @Size(max = 100)
     private String middleName;
 
     @Column(nullable = false)
+    @NotNull
     private LocalDate birthDate;
 
     @Column(nullable = false)
+    @NotNull
     private LocalDate hireDate = LocalDate.now();
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull
     private Status status;
 
     public Integer getId() {

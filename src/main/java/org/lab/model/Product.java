@@ -1,6 +1,9 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 @Entity
@@ -12,25 +15,33 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "product_type_id", nullable = false)
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private ProductType productType;
 
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
+    @NotNull
     private Location location;
 
     @ManyToOne
     @JoinColumn(name = "supplier_id", nullable = false)
+    @NotNull
     private Partners supplier;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
+    @NotNull
     private Partners customer;
 
     @ManyToOne
     @JoinColumn(name = "queue_id", nullable = false)
+    @NotNull
     private Queue queue;
 
     @Column(nullable = false, length = 100)
+    @NotNull
+    @Size(max = 100)
     private String name;
 
     @Column(columnDefinition = "TEXT")

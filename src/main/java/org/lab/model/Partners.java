@@ -1,6 +1,8 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "partners")
@@ -10,12 +12,18 @@ public class Partners {
     private Integer id;
 
     @Column(nullable = false, length = 150)
+    @NotNull
+    @Size(max = 150)
     private String name;
 
     @Column(nullable = false, unique = true, length = 150)
+    @NotNull
+    @Size(max = 150)
     private String email;
 
     @Column(unique = true, length = 20)
+    @NotNull
+    @Size(max = 20)
     private String phoneNumber;
 
     @Column(columnDefinition = "TEXT")

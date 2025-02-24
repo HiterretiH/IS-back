@@ -4,9 +4,12 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.lab.annotations.ManagerOnly;
+import org.lab.annotations.Secured;
 import org.lab.model.Manager;
 import org.lab.model.User;
 import org.lab.service.ManagerService;
+import org.lab.validation.ModelValidator;
 
 import java.util.List;
 
@@ -18,12 +21,14 @@ public class ManagerController {
     @Inject
     private ManagerService managerService;
 
+    @Secured
     @GET
     public Response getAllManagers() {
         List<Manager> managers = managerService.getAll();
         return Response.ok(managers).build();
     }
 
+    @Secured
     @GET
     @Path("/{id}")
     public Response getManagerById(@PathParam("id") int id) {
@@ -34,12 +39,20 @@ public class ManagerController {
         return Response.ok(manager).build();
     }
 
+    @Secured
+    @ManagerOnly
     @POST
     public Response createManager(Manager manager) {
+        if (!ModelValidator.validate(manager)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         managerService.create(manager);
         return Response.status(Response.Status.CREATED).entity(manager).build();
     }
 
+    @Secured
+    @ManagerOnly
     @PUT
     @Path("/{id}")
     public Response updateManager(@PathParam("id") int id, Manager manager) {
@@ -47,11 +60,18 @@ public class ManagerController {
         if (existingManager == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        manager.setId(id); // Ensure the correct ID is set
+        manager.setId(id);
+
+        if (!ModelValidator.validate(manager)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
         managerService.update(manager);
         return Response.ok(manager).build();
     }
 
+    @Secured
+    @ManagerOnly
     @DELETE
     @Path("/{id}")
     public Response deleteManager(@PathParam("id") int id) {
@@ -63,6 +83,8 @@ public class ManagerController {
         return Response.status(Response.Status.NO_CONTENT).build();
     }
 
+    @Secured
+    @ManagerOnly
     @PUT
     @Path("/{id}/reassign")
     public Response reassignManager(@PathParam("id") int id, User user) {

@@ -8,6 +8,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.lab.model.Role;
 import org.lab.model.User;
+import org.lab.service.Token;
 
 import java.util.Date;
 
@@ -17,16 +18,20 @@ public class JwtUtils {
     private static final String SECRET_KEY = dotenv.get("SECRET_KEY");
     private static final long EXPIRATION_TIME = 1000*60*60 * 24;
 
-    public static String generateToken(User user) {
+    public static Token generateToken(User user) {
         assert SECRET_KEY != null;
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
-        return JWT.create()
+        Role role = user.getRole();
+        int expirationTime = (int) (System.currentTimeMillis() + EXPIRATION_TIME);
+        String token = JWT.create()
                 .withSubject(user.getId().toString())
                 .withClaim("username", user.getUsername())
                 .withClaim("role", user.getRole().name())
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(algorithm);
+
+        return new Token(token, expirationTime, role);
     }
 
     public static boolean validateToken(String token, User user) {
@@ -36,7 +41,7 @@ public class JwtUtils {
             Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
             JWTVerifier verifier = JWT.require(algorithm).build();
             DecodedJWT jwt = verifier.verify(token);
-            return Integer.valueOf(jwt.getSubject()) == (user.getId());
+            return Integer.valueOf(jwt.getSubject()).equals(user.getId());
         } catch (JWTVerificationException e) {
             return false;
         }

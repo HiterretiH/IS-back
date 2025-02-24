@@ -5,7 +5,6 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.lab.model.*;
 import org.lab.repository.SortingRequestRepository;
-import org.lab.repository.WarehouseOperatorRepository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +31,6 @@ public class SortingRequestService {
         sortingRequestRepository.delete(sortingRequest.getId());
     }
 
-    // Отказаться от заявки, система автоматически перераспределяет заявку
     @Transactional
     public void reject(SortingRequest sortingRequest) {
         List<SortingRequest> requests = sortingRequestRepository.findAll();

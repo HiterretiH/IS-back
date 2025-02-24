@@ -1,6 +1,8 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "product_type")
@@ -10,6 +12,8 @@ public class ProductType {
     private Integer id;
 
     @Column(nullable = false, length = 100)
+    @NotNull
+    @Size(max = 100)
     private String name;
 
     public Integer getId() {

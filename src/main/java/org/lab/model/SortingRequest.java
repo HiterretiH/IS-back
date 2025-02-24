@@ -1,6 +1,8 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -12,6 +14,7 @@ public class SortingRequest {
 
     @ManyToOne
     @JoinColumn(name = "operator_id", nullable = false)
+    @NotNull
     private User operator;
 
     @ManyToOne
@@ -22,6 +25,7 @@ public class SortingRequest {
     private String description;
 
     @Column(nullable = false, updatable = false)
+    @NotNull
     private LocalDateTime creationTime = LocalDateTime.now();
 
     public Integer getId() {

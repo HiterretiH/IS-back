@@ -4,7 +4,6 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import org.lab.model.ProductType;
 import org.lab.model.Status;
-import org.lab.model.User;
 import org.lab.model.WarehouseOperator;
 import org.lab.repository.WarehouseOperatorRepository;
 
@@ -33,8 +32,11 @@ public class WarehouseOperatorService {
 
     public void fire(WarehouseOperator warehouseOperator) {
         warehouseOperator.setStatus(Status.FIRED);
+        warehouseOperatorRepository.update(warehouseOperator);
     }
+
     public void assignProductType(WarehouseOperator warehouseOperator, ProductType productType) {
         warehouseOperator.setProductType(productType);
+        warehouseOperatorRepository.update(warehouseOperator);
     }
 }

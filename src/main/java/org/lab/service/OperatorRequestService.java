@@ -16,6 +16,8 @@ import java.util.List;
 public class OperatorRequestService {
     @Inject
     private OperatorRequestRepository operatorRequestRepository;
+    @Inject
+    private UserRepository userRepository;
 
     @Inject
     private UserRepository userRepository;
@@ -40,6 +42,12 @@ public class OperatorRequestService {
     }
 
     public void update(OperatorRequest operatorRequest) {
+        User user = operatorRequest.getOperator();
+        if (user.getRole() == Role.PENDING && operatorRequest.getStatus() == RequestState.ACCEPTED) {
+            user.setRole(Role.OPERATOR);
+            userRepository.update(user);
+        }
+
         operatorRequestRepository.update(operatorRequest);
     }
 
@@ -62,5 +70,10 @@ public class OperatorRequestService {
     public void reject(OperatorRequest operatorRequest) {
         operatorRequest.setStatus(RequestState.REJECTED);
         this.update(operatorRequest);
+    }
+
+    public OperatorRequest getByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        return operatorRequestRepository.getByOperatorId(user.getId());
     }
 }

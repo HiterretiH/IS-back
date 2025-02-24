@@ -1,6 +1,7 @@
 package org.lab.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "types_and_operators")
@@ -11,10 +12,12 @@ public class TypesAndOperators {
 
     @ManyToOne
     @JoinColumn(name = "product_type_id", nullable = false)
+    @NotNull
     private ProductType productType;
 
     @ManyToOne
     @JoinColumn(name = "operator_id", nullable = false)
+    @NotNull
     private User operator;
 
     public ProductType getProductType() {
