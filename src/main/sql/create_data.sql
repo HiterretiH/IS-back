@@ -4,9 +4,9 @@ SELECT
 FROM
     generate_series(1, 100000) i;
 
-INSERT INTO Worker (first_name, last_name, birth_date, hire_date, warehouse_id)
+INSERT INTO Worker (first_name, last_name, middle_name, birth_date, hire_date, warehouse_id)
 SELECT
-    'Worker #' || i, 'Last name #' || i, '2000-01-01', CURRENT_DATE, (i-1)/10 + 1
+    'Worker #' || i, 'Last name #' || i, 'Middle name #' || i, '2000-01-01', CURRENT_DATE, (i-1)/10 + 1
 FROM
     generate_series(1, 1000000) i;
 
@@ -35,12 +35,6 @@ SELECT
 FROM
     generate_series(1, 1000000) i;
 
-INSERT INTO Shelf (location_id)
-SELECT
-    i
-FROM
-    generate_series(1, 1000000) i;
-
 INSERT INTO Sorting_Station (warehouse_id, location_id, capacity, sort_time_seconds)
 SELECT
     (i-1) / 10 + 1 AS warehouse_id,
@@ -57,7 +51,7 @@ SELECT
 FROM
     generate_series(1, 1000000) i;
 
-INSERT INTO Product (product_type_id, location_id, supplier, customer, name, description, expiration_date, product_state, priority)
+INSERT INTO Product (product_type_id, location_id, supplier_id, customer_id, name, description, expiration_date, product_state, priority)
 SELECT
     i,
     i,

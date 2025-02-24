@@ -18,7 +18,7 @@ public class LoadersAndShelves {
     @ManyToOne
     @NotNull
     @JoinColumn(name = "shelf_id", nullable = false)
-    private Shelf shelf;
+    private Location shelf;
 
     public Integer getId() {
         return id;
@@ -36,11 +36,11 @@ public class LoadersAndShelves {
         this.worker = worker;
     }
 
-    public Shelf getShelf() {
+    public Location getShelf() {
         return shelf;
     }
 
-    public void setShelf(Shelf shelf) {
+    public void setShelf(Location shelf) {
         this.shelf = shelf;
     }
 }

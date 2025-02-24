@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import org.lab.model.Partners;
 import org.lab.repository.PartnersRepository;
+import org.lab.utils.PaginatedResponse;
 
 import java.util.List;
 
@@ -12,8 +13,10 @@ public class PartnersService {
     @Inject
     private PartnersRepository partnersRepository;
 
-    public List<Partners> getAll() {
-        return partnersRepository.findAll();
+    public PaginatedResponse<String> getAll(int page, int size) {
+        List<String> data = partnersRepository.findWithPagination(page, size);
+        int count = partnersRepository.count();
+        return new PaginatedResponse<>(data, count);
     }
 
     public Partners getById(int id) {

@@ -25,7 +25,7 @@ public class LocationController {
         if (page < 0) page = 0;
         if (size <= 0) size = 10;
 
-        PaginatedResponse<Location> locations = locationService.getAll(page, size);
+        PaginatedResponse<String> locations = locationService.getAll(page, size);
         return Response.ok(locations).build();
     }
 

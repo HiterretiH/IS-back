@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import org.lab.model.Status;
 import org.lab.model.Worker;
 import org.lab.repository.WorkerRepository;
+import org.lab.utils.PaginatedResponse;
 
 import java.util.List;
 
@@ -13,7 +14,11 @@ public class WorkerService {
     @Inject
     private WorkerRepository workerRepository;
 
-    public List<Worker> getAll() {return workerRepository.findAll();}
+    public PaginatedResponse<String> getAll(int page, int size) {
+        List<String> data = workerRepository.findWithPagination(page, size);
+        int count = workerRepository.count();
+        return new PaginatedResponse<>(data, count);
+    }
 
     public Worker getById(int id) {return workerRepository.findById(id);}
 

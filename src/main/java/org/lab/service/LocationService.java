@@ -13,8 +13,8 @@ public class LocationService {
     @Inject
     private LocationRepository locationRepository;
 
-    public PaginatedResponse<Location> getAll(int page, int size) {
-        List<Location> data = locationRepository.findWithPagination(page, size);
+    public PaginatedResponse<String> getAll(int page, int size) {
+        List<String> data = locationRepository.findWithPagination(page, size);
         int count = locationRepository.count();
         return new PaginatedResponse<>(data, count);
     }

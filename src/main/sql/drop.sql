@@ -16,6 +16,14 @@ DROP FUNCTION IF EXISTS get_queues_paginated(INT,INT);
 DROP FUNCTION IF EXISTS get_queues_count();
 DROP FUNCTION IF EXISTS get_sorting_stations_paginated(INT,INT);
 DROP FUNCTION IF EXISTS get_sorting_stations_count();
+DROP FUNCTION IF EXISTS get_workers_paginated(INT,INT);
+DROP FUNCTION IF EXISTS get_workers_count();
+DROP FUNCTION IF EXISTS get_partners_paginated(INT,INT);
+DROP FUNCTION IF EXISTS get_partners_count();
+DROP FUNCTION IF EXISTS get_locations_paginated(INT,INT);
+DROP FUNCTION IF EXISTS get_locations_count();
+DROP FUNCTION IF EXISTS get_warehouses_paginated(INT,INT);
+DROP FUNCTION IF EXISTS get_warehouses_count();
 
 -- Drop tables
 DROP TABLE IF EXISTS Operator_Request CASCADE;
@@ -23,10 +31,8 @@ DROP TABLE IF EXISTS Loaders_And_Shelves CASCADE;
 DROP TABLE IF EXISTS Product_In_Queue CASCADE;
 DROP TABLE IF EXISTS Product CASCADE;
 DROP TABLE IF EXISTS Queue CASCADE;
-DROP TABLE IF EXISTS Shelf CASCADE;
 DROP TABLE IF EXISTS Sorting_Station CASCADE;
 DROP TABLE IF EXISTS Warehouse CASCADE;
-DROP TABLE IF EXISTS Manager CASCADE;
 DROP TABLE IF EXISTS Warehouse_Operator CASCADE;
 DROP TABLE IF EXISTS Worker CASCADE;
 DROP TABLE IF EXISTS Product_Type CASCADE;

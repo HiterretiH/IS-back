@@ -9,6 +9,7 @@ import org.lab.annotations.Secured;
 import org.lab.model.Status;
 import org.lab.model.Worker;
 import org.lab.service.WorkerService;
+import org.lab.utils.PaginatedResponse;
 import org.lab.validation.ModelValidator;
 
 import java.util.List;
@@ -21,10 +22,13 @@ public class WorkerController {
     @Inject
     private WorkerService workerService;
 
-    @GET
     @Secured
-    public Response getAllWorkers() {
-        List<Worker> workers = workerService.getAll();
+    @GET
+    public Response getAllWorkers(@QueryParam("page") int page, @QueryParam("size") int size) {
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
+
+        PaginatedResponse<String> workers = workerService.getAll(page, size);
         return Response.ok(workers).build();
     }
 

@@ -2,18 +2,19 @@ package org.lab.repository;
 
 import jakarta.ejb.Stateless;
 import jakarta.persistence.Query;
-import org.lab.model.Location;
+import org.lab.model.Warehouse;
+import org.lab.model.Worker;
 
 import java.util.List;
 
 @Stateless
-public class LocationRepository extends GenericRepository<Location, Integer> {
-    public LocationRepository() {
-        super(Location.class);
+public class WarehouseRepository extends GenericRepository<Warehouse, Integer> {
+    public WarehouseRepository() {
+        super(Warehouse.class);
     }
 
     public List<String> findWithPagination(int page, int size) {
-        Query query = entityManager.createNativeQuery("SELECT * FROM get_locations_paginated(:page, :size)");
+        Query query = entityManager.createNativeQuery("SELECT * FROM get_warehouses_paginated(:page, :size)");
         query.setParameter("page", page);
         query.setParameter("size", size);
 
@@ -22,7 +23,7 @@ public class LocationRepository extends GenericRepository<Location, Integer> {
 
 
     public Integer count() {
-        Query query = entityManager.createNativeQuery("SELECT * FROM get_locations_count()");
+        Query query = entityManager.createNativeQuery("SELECT * FROM get_warehouses_count()");
         return (Integer) query.getSingleResult();
     }
 }

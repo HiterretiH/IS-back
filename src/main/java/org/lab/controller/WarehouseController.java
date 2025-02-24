@@ -6,52 +6,50 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
-import org.lab.model.Partners;
-import org.lab.service.PartnersService;
+import org.lab.model.Warehouse;
+import org.lab.service.WarehouseService;
 import org.lab.utils.PaginatedResponse;
 import org.lab.validation.ModelValidator;
 
-import java.util.List;
-
-@Path("/partners")
+@Path("/warehouses")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class PartnersController {
+public class WarehouseController {
 
     @Inject
-    private PartnersService partnersService;
+    private WarehouseService warehouseService;
 
     @Secured
     @GET
-    public Response getAllPartners(@QueryParam("page") int page, @QueryParam("size") int size) {
+    public Response getAllWarehouses(@QueryParam("page") int page, @QueryParam("size") int size) {
         if (page < 0) page = 0;
         if (size <= 0) size = 10;
 
-        PaginatedResponse<String> partners = partnersService.getAll(page, size);
-        return Response.ok(partners).build();
+        PaginatedResponse<String> warehouses = warehouseService.getAll(page, size);
+        return Response.ok(warehouses).build();
     }
 
     @Secured
     @GET
     @Path("/{id}")
-    public Response getPartnerById(@PathParam("id") int id) {
-        Partners partner = partnersService.getById(id);
-        if (partner == null) {
+    public Response getWarehouseById(@PathParam("id") int id) {
+        Warehouse warehouse = warehouseService.getById(id);
+        if (warehouse == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(partner).build();
+        return Response.ok(warehouse).build();
     }
 
     @Secured
     @ManagerOnly
     @POST
-    public Response createPartner(Partners partner) {
-        if (!ModelValidator.validate(partner)) {
+    public Response createWarehouse(Warehouse warehouse) {
+        if (!ModelValidator.validate(warehouse)) {
             return ModelValidator.getValidationErrorResponse();
         }
 
-        partnersService.create(partner);
-        return Response.status(Response.Status.CREATED).entity(partner).build();
+        warehouseService.create(warehouse);
+        return Response.status(Response.Status.CREATED).entity(warehouse).build();
     }
 
     @Secured
@@ -59,11 +57,11 @@ public class PartnersController {
     @DELETE
     @Path("/{id}")
     public Response deletePartner(@PathParam("id") int id) {
-        Partners partner = partnersService.getById(id);
-        if (partner == null) {
+        Warehouse warehouse = warehouseService.getById(id);
+        if (warehouse == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        partnersService.delete(partner);
+        warehouseService.delete(warehouse);
         return Response.noContent().build();
     }
 }

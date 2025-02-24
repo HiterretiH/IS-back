@@ -52,11 +52,6 @@ CREATE TABLE Worker (
                         warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE
 );
 
-CREATE TABLE Shelf (
-                       id SERIAL PRIMARY KEY,
-                       location_id INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE
-);
-
 CREATE TABLE Sorting_Station (
                                  id SERIAL PRIMARY KEY,
                                  warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE,
@@ -80,7 +75,7 @@ CREATE TABLE Warehouse_Operator (
 CREATE TABLE Loaders_And_Shelves (
                                      id SERIAL PRIMARY KEY,
                                      worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
-                                     shelf_id INT NOT NULL REFERENCES Shelf(id) ON DELETE CASCADE
+                                     shelf_id INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Operator_Request (
@@ -289,6 +284,113 @@ BEGIN
     RETURN (
         SELECT COUNT(*)
         FROM Sorting_Station
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_workers_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+    RETURN QUERY
+        SELECT jsonb_build_object(
+                       'id', w.id,
+                       'first_name', w.first_name,
+                       'last_name', w.last_name,
+                       'middle_name', w.middle_name,
+                       'birth_date', w.birth_date,
+                       'hire_date', w.hire_date,
+                       'warehouse_id', w.warehouse_id
+               )
+        FROM Worker w
+        ORDER BY w.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_workers_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Worker
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_locations_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+    RETURN QUERY
+        SELECT jsonb_build_object(
+                       'id', l.id,
+                       'name', l.name,
+                       'description', l.description,
+                       'location_row', l.location_row
+               )
+        FROM Location l
+        ORDER BY l.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_locations_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Location
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_partners_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+    RETURN QUERY
+        SELECT jsonb_build_object(
+                       'id', p.id,
+                       'name', p.name,
+                       'email', p.email,
+                       'phone_number', p.phone_number,
+                       'address', p.address
+               )
+        FROM Partners p
+        ORDER BY p.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_partners_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Partners
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_warehouses_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+    RETURN QUERY
+        SELECT jsonb_build_object(
+                       'id', w.id,
+                       'name', w.name,
+                       'address', w.address
+               )
+        FROM Warehouse w
+        ORDER BY w.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_warehouses_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Warehouse
     );
 END;
 $$ LANGUAGE plpgsql;
