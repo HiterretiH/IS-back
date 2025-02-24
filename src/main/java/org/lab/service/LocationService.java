@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import org.lab.model.Location;
 import org.lab.repository.LocationRepository;
+import org.lab.utils.PaginatedResponse;
 
 import java.util.List;
 
@@ -12,8 +13,10 @@ public class LocationService {
     @Inject
     private LocationRepository locationRepository;
 
-    public List<Location> getAll() {
-        return locationRepository.findAll();
+    public PaginatedResponse<Location> getAll(int page, int size) {
+        List<Location> data = locationRepository.findWithPagination(page, size);
+        int count = locationRepository.count();
+        return new PaginatedResponse<>(data, count);
     }
 
     public Location getById(int id) {

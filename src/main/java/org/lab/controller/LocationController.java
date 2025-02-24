@@ -8,9 +8,8 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.Location;
 import org.lab.service.LocationService;
+import org.lab.utils.PaginatedResponse;
 import org.lab.validation.ModelValidator;
-
-import java.util.List;
 
 @Path("/locations")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -22,8 +21,11 @@ public class LocationController {
 
     @Secured
     @GET
-    public Response getAllLocations() {
-        List<Location> locations = locationService.getAll();
+    public Response getAllLocations(@QueryParam("page") int page, @QueryParam("size") int size) {
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
+
+        PaginatedResponse<Location> locations = locationService.getAll(page, size);
         return Response.ok(locations).build();
     }
 
