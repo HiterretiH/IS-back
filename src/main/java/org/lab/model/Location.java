@@ -19,6 +19,7 @@ public class Location {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "location_row")
     private Integer locationRow;
 
     public Integer getId() {

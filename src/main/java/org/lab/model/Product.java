@@ -47,6 +47,7 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(name = "expiration_date")
     private LocalDate expirationDate;
 
     @Enumerated(EnumType.STRING)

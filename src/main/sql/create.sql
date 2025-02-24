@@ -199,17 +199,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION get_product_types_count()
-    RETURNS TABLE(id INT, name VARCHAR) AS $$
-BEGIN
-    RETURN QUERY
-        SELECT pt.id, pt.name
-        FROM product_type pt
-        ORDER BY pt.id
-        LIMIT size OFFSET page * size;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION get_product_types_count()
     RETURNS INT AS $$
 BEGIN
     RETURN (

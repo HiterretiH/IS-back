@@ -22,7 +22,7 @@ public class OperatorRequest {
     @NotNull
     private RequestState status;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     @NotNull
     private LocalDateTime createdAt = LocalDateTime.now();
 
