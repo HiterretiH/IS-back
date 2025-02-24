@@ -8,6 +8,7 @@ import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.ProductType;
 import org.lab.service.ProductTypeService;
+import org.lab.utils.PaginatedResponse;
 import org.lab.validation.ModelValidator;
 
 import java.util.List;
@@ -22,8 +23,11 @@ public class ProductTypeController {
 
     @Secured
     @GET
-    public Response getAllProductTypes() {
-        List<ProductType> productTypes = productTypeService.getAll();
+    public Response getAllProductTypes(@QueryParam("page") int page, @QueryParam("size") int size) {
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
+
+        PaginatedResponse<ProductType> productTypes = productTypeService.getAll(page, size);
         return Response.ok(productTypes).build();
     }
 

@@ -58,8 +58,9 @@ public class OperatorRequestService {
     public List<OperatorRequest> getAllPending() {
         return operatorRequestRepository.findAllPending();
     }
+
     @Transactional
-    public void approve(OperatorRequest operatorRequest, int productTypeId) {
+    public void approve(OperatorRequest operatorRequest, ProductType productType) {
         operatorRequest.setStatus(RequestState.ACCEPTED);
         User user = operatorRequest.getOperator();
         user.setRole(Role.OPERATOR);
@@ -68,7 +69,6 @@ public class OperatorRequestService {
 
         WarehouseOperator operator = new WarehouseOperator();
         operator.setAppUser(user);
-        ProductType productType = productTypeRepository.findById(productTypeId);
         operator.setProductType(productType);
         warehouseOperatorRepository.save(operator);
     }

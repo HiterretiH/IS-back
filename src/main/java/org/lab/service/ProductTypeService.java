@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import org.lab.model.ProductType;
 import org.lab.repository.ProductTypeRepository;
+import org.lab.utils.PaginatedResponse;
 
 import java.util.List;
 
@@ -12,8 +13,10 @@ public class ProductTypeService {
     @Inject
     private ProductTypeRepository productTypeRepository;
 
-    public List<ProductType> getAll() {
-        return productTypeRepository.findAll();
+    public PaginatedResponse<ProductType> getAll(int page, int size) {
+        List<ProductType> data = productTypeRepository.findWithPagination(page, size);
+        int count = productTypeRepository.count();
+        return new PaginatedResponse<>(data, count);
     }
 
     public ProductType getById(int id) {

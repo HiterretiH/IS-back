@@ -74,7 +74,7 @@ CREATE TABLE Queue (
 CREATE TABLE Warehouse_Operator (
                                     id SERIAL PRIMARY KEY,
                                     app_user_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
-                                    product_type_id INT REFERENCES Product_Type(id) ON DELETE CASCADE
+                                    product_type_id INT NOT NULL REFERENCES Product_Type(id) ON DELETE CASCADE
 );
 
 CREATE TABLE Loaders_And_Shelves (
@@ -184,5 +184,37 @@ SELECT wo.*
 FROM warehouse_operator wo
 WHERE wo.app_user_id = user_id
     LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_product_types_paginated(page INT, size INT)
+    RETURNS TABLE(id INT, name VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+        SELECT pt.id, pt.name
+        FROM product_type pt
+        ORDER BY pt.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_product_types_count()
+    RETURNS TABLE(id INT, name VARCHAR) AS $$
+BEGIN
+    RETURN QUERY
+        SELECT pt.id, pt.name
+        FROM product_type pt
+        ORDER BY pt.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_product_types_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM product_type
+    );
 END;
 $$ LANGUAGE plpgsql;

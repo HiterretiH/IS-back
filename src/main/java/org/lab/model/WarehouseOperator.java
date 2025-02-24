@@ -16,7 +16,8 @@ public class WarehouseOperator {
     private User appUser;
 
     @ManyToOne
-    @JoinColumn(name = "product_type")
+    @JoinColumn(name = "product_type_id", nullable = false
+    )
     private ProductType productType;
 
     public Integer getId() {

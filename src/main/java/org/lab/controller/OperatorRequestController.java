@@ -5,7 +5,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.model.OperatorRequest;
+import org.lab.model.ProductType;
 import org.lab.model.User;
+import org.lab.repository.ProductTypeRepository;
 import org.lab.service.OperatorRequestService;
 
 import java.util.List;
@@ -17,6 +19,9 @@ public class OperatorRequestController {
 
     @Inject
     private OperatorRequestService operatorRequestService;
+
+    @Inject
+    private ProductTypeRepository productTypeRepository;
 
     @GET
     public Response getAllOperatorRequests() {
@@ -81,12 +86,16 @@ public class OperatorRequestController {
 
     @PUT
     @Path("/{id}/approve")
-    public Response approveOperatorRequest(@PathParam("id") int id, int productTypeId) {
+    public Response approveOperatorRequest(@PathParam("id") int id, @QueryParam("productTypeId") int productTypeId) {
         OperatorRequest operatorRequest = operatorRequestService.getById(id);
         if (operatorRequest == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        operatorRequestService.approve(operatorRequest, productTypeId);
+        ProductType productType = productTypeRepository.findById(id);
+        if (productType == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        operatorRequestService.approve(operatorRequest, productType);
         return Response.ok(operatorRequest).build();
     }
 

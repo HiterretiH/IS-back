@@ -8,6 +8,8 @@ DROP FUNCTION IF EXISTS find_all_in_queue(INT);
 DROP FUNCTION IF EXISTS find_queues_by_sorting_station(INT);
 DROP FUNCTION IF EXISTS find_user_by_username(TEXT);
 DROP FUNCTION IF EXISTS find_warehouse_operator_by_user_id(INT);
+DROP FUNCTION IF EXISTS get_product_types_paginated(INT, INT);
+DROP FUNCTION IF EXISTS get_product_types_count();
 
 -- Drop tables
 DROP TABLE IF EXISTS Operator_Request CASCADE;
