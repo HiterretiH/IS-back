@@ -28,6 +28,7 @@ public class AuthFilter implements ContainerRequestFilter {
     public void filter(ContainerRequestContext requestContext) {
         if (resourceInfo.getResourceMethod().isAnnotationPresent(Secured.class)) {
             String authHeader = requestContext.getHeaderString(HttpHeaders.AUTHORIZATION);
+            System.out.println("authHeader: " + authHeader);
             if (authHeader == null) {
                 requestContext.abortWith(
                         Response.status(Response.Status.UNAUTHORIZED).entity("User not authorized").build()

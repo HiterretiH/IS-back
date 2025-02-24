@@ -3,12 +3,11 @@ package org.lab.service;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.lab.model.OperatorRequest;
-import org.lab.model.RequestState;
-import org.lab.model.Role;
-import org.lab.model.User;
+import org.lab.model.*;
 import org.lab.repository.OperatorRequestRepository;
+import org.lab.repository.ProductTypeRepository;
 import org.lab.repository.UserRepository;
+import org.lab.repository.WarehouseOperatorRepository;
 
 import java.util.List;
 
@@ -18,6 +17,10 @@ public class OperatorRequestService {
     private OperatorRequestRepository operatorRequestRepository;
     @Inject
     private UserRepository userRepository;
+    @Inject
+    private ProductTypeRepository productTypeRepository;
+    @Inject
+    private WarehouseOperatorRepository warehouseOperatorRepository;
 
     public List<OperatorRequest> getAll() {
         return operatorRequestRepository.findAll();
@@ -56,13 +59,20 @@ public class OperatorRequestService {
         return operatorRequestRepository.findAllPending();
     }
     @Transactional
-    public void approve(OperatorRequest operatorRequest) {
+    public void approve(OperatorRequest operatorRequest, int productTypeId) {
         operatorRequest.setStatus(RequestState.ACCEPTED);
         User user = operatorRequest.getOperator();
         user.setRole(Role.OPERATOR);
         userRepository.update(user);
         this.update(operatorRequest);
+
+        WarehouseOperator operator = new WarehouseOperator();
+        operator.setAppUser(user);
+        ProductType productType = productTypeRepository.findById(productTypeId);
+        operator.setProductType(productType);
+        warehouseOperatorRepository.save(operator);
     }
+
     @Transactional
     public void reject(OperatorRequest operatorRequest) {
         operatorRequest.setStatus(RequestState.REJECTED);

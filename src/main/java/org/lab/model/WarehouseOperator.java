@@ -16,11 +16,6 @@ public class WarehouseOperator {
     private User appUser;
 
     @ManyToOne
-    @JoinColumn(name = "worker_id", nullable = false)
-    @NotNull
-    private Worker worker;
-
-    @ManyToOne
     @JoinColumn(name = "product_type")
     private ProductType productType;
 
@@ -45,13 +40,5 @@ public class WarehouseOperator {
 
     public void setAppUser(User appUser) {
         this.appUser = appUser;
-    }
-
-    public Worker getWorker() {
-        return worker;
-    }
-
-    public void setWorker(Worker worker) {
-        this.worker = worker;
     }
 }

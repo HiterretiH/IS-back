@@ -81,12 +81,12 @@ public class OperatorRequestController {
 
     @PUT
     @Path("/{id}/approve")
-    public Response approveOperatorRequest(@PathParam("id") int id) {
+    public Response approveOperatorRequest(@PathParam("id") int id, int productTypeId) {
         OperatorRequest operatorRequest = operatorRequestService.getById(id);
         if (operatorRequest == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        operatorRequestService.approve(operatorRequest);
+        operatorRequestService.approve(operatorRequest, productTypeId);
         return Response.ok(operatorRequest).build();
     }
 
