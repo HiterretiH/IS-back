@@ -3,13 +3,11 @@ package org.lab.service;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.lab.model.Product;
-import org.lab.model.ProductState;
-import org.lab.model.Queue;
-import org.lab.model.SortingStation;
+import org.lab.model.*;
 import org.lab.repository.ProductRepository;
 import org.lab.repository.QueueRepository;
 import org.lab.repository.SortingStationRepository;
+import org.lab.utils.PaginatedResponse;
 
 import java.util.List;
 
@@ -25,8 +23,10 @@ public class ProductService {
     @Inject
     private QueueRepository queueRepository;
 
-    public List<Product> getAll() {
-        return productRepository.findAll();
+    public PaginatedResponse<String> getAll(int page, int size) {
+        List<String> data = productRepository.findWithPagination(page, size);
+        int count = productRepository.count();
+        return new PaginatedResponse<>(data, count);
     }
 
     public Product getById(int id) {

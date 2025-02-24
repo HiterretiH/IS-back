@@ -94,8 +94,8 @@ CREATE TABLE Product (
     id SERIAL PRIMARY KEY,
     product_type_id INT REFERENCES Product_Type(id),
     location_id INT REFERENCES Location(id),
-    supplier INT REFERENCES Partners(id),
-    customer INT REFERENCES Partners(id),
+    supplier_id INT REFERENCES Partners(id),
+    customer_id INT REFERENCES Partners(id),
     queue_id INT REFERENCES Queue(id),
     name VARCHAR(100) NOT NULL,
     description TEXT,
@@ -204,6 +204,39 @@ BEGIN
     RETURN (
         SELECT COUNT(*)
         FROM product_type
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_products_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+    RETURN QUERY
+        SELECT jsonb_build_object(
+                       'id', p.id,
+                       'product_type_id', p.product_type_id,
+                       'location_id', p.location_id,
+                       'supplier_id', p.supplier_id,
+                       'customer_id', p.customer_id,
+                       'queue_id', p.queue_id,
+                       'name', p.name,
+                       'description', p.description,
+                       'expiration_date', p.expiration_date,
+                       'product_state', p.product_state::product_state_type,
+                       'priority', p.priority
+               )
+        FROM Product p
+        ORDER BY p.id
+        LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_products_count()
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM product
     );
 END;
 $$ LANGUAGE plpgsql;

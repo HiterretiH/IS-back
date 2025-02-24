@@ -21,7 +21,7 @@ public class Partners {
     @Size(max = 150)
     private String email;
 
-    @Column(unique = true, length = 20)
+    @Column(name="phone_number", unique = true, length = 20)
     @NotNull
     @Size(max = 20)
     private String phoneNumber;

@@ -20,7 +20,7 @@ public class SortingStation {
     @Column(nullable = false)
     private Integer capacity;
 
-    @Column(nullable = false)
+    @Column(name="sort_time_seconds", nullable = false)
     private Integer sortTimeSeconds;
 
     public Integer getId() {

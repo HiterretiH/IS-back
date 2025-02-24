@@ -13,26 +13,26 @@ public class Worker {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, length = 100)
+    @Column(name="first_name", nullable = false, length = 100)
     @NotNull
     @Size(max = 100)
     private String firstName;
 
-    @Column(nullable = false, length = 100)
+    @Column(name="last_name", nullable = false, length = 100)
     @NotNull
     @Size(max = 100)
     private String lastName;
 
-    @Column(length = 100)
+    @Column(name="middle_name", length = 100)
     @NotNull
     @Size(max = 100)
     private String middleName;
 
-    @Column(nullable = false)
+    @Column(name="birth_date", nullable = false)
     @NotNull
     private LocalDate birthDate;
 
-    @Column(nullable = false)
+    @Column(name="hire_date", nullable = false)
     @NotNull
     private LocalDate hireDate = LocalDate.now();
 

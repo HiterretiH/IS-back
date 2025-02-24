@@ -7,9 +7,11 @@ import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOrAllowedOperator;
 import org.lab.annotations.Secured;
 import org.lab.model.Product;
+import org.lab.model.ProductType;
 import org.lab.model.SortingStation;
 import org.lab.service.ProductService;
 import org.lab.service.SortingStationService;
+import org.lab.utils.PaginatedResponse;
 import org.lab.validation.ModelValidator;
 
 import java.util.List;
@@ -27,8 +29,11 @@ public class ProductController {
 
     @Secured
     @GET
-    public Response getAllProducts() {
-        List<Product> products = productService.getAll();
+    public Response getAllProducts(@QueryParam("page") int page, @QueryParam("size") int size) {
+        if (page < 0) page = 0;
+        if (size <= 0) size = 10;
+
+        PaginatedResponse<String> products = productService.getAll(page, size);
         return Response.ok(products).build();
     }
 

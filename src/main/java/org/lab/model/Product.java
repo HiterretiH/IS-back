@@ -51,7 +51,7 @@ public class Product {
     private LocalDate expirationDate;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "product_state", nullable = false)
     private ProductState productState;
 
     private Integer priority;
