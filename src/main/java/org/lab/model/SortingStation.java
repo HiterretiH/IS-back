@@ -10,8 +10,8 @@ public class SortingStation {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "management_center_id", nullable = false)
-    private GoodsManagementCenter managementCenter;
+    @JoinColumn(name = "warehouse_id", nullable = false)
+    private Warehouse warehouse;
 
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
@@ -31,12 +31,12 @@ public class SortingStation {
         this.id = id;
     }
 
-    public GoodsManagementCenter getManagementCenter() {
-        return managementCenter;
+    public Warehouse getWarehouse() {
+        return warehouse;
     }
 
-    public void setManagementCenter(GoodsManagementCenter managementCenter) {
-        this.managementCenter = managementCenter;
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
     }
 
     public Location getLocation() {

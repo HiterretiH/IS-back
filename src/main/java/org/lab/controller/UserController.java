@@ -8,7 +8,9 @@ import org.lab.model.User;
 import org.lab.model.WarehouseOperator;
 import org.lab.service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Path("/users")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -21,21 +23,21 @@ public class UserController {
     @POST
     @Path("/register")
     public Response register(User user) {
-        String token = userService.register(user);
-        if (token == null) {
+        Map<String, String> response = userService.register(user);
+        if (response.get("token") == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Registration failed").build();
         }
-        return Response.status(Response.Status.CREATED).entity(token).build();
+        return Response.status(Response.Status.CREATED).entity(response).build();
     }
 
     @POST
     @Path("/login")
     public Response login(User user) {
-        String token = userService.login(user);
-        if (token == null) {
+        Map<String, String> response = userService.login(user);
+        if (response == null) {
             return Response.status(Response.Status.UNAUTHORIZED).entity("Invalid credentials").build();
         }
-        return Response.ok(token).build();
+        return Response.ok(response).build();
     }
 
     @GET

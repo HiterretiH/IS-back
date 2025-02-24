@@ -51,33 +51,23 @@ SELECT
 FROM
     generate_series(1, 1000000) i;
 
-INSERT INTO Queue (capacity, sorting_station_id)
-SELECT
-    i, i
-FROM
-    generate_series(1, 1000000) i;
-
 INSERT INTO Shelf (location_id)
 SELECT
     i
 FROM
     generate_series(1, 1000000) i;
 
-INSERT INTO Goods_Management_Center (warehouse_id, location_id)
+_
+
+INSERT INTO Queue (capacity, sorting_station_id)
 SELECT
     i, i
-FROM
-    generate_series(1, 1000000) i;
-
-INSERT INTO Sorting_Station (management_center_id, location_id, capacity, sort_time_seconds)
-SELECT
-    i, i, 10, 10
 FROM
     generate_series(1, 1000000) i;
 
 INSERT INTO Warehouse_Operator (app_user_id, worker_id)
 SELECT
-    i, i
+    i, i, 'Product type ' || i
 FROM
     generate_series(1, 1000000) i;
 

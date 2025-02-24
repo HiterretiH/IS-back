@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.model.OperatorRequest;
+import org.lab.model.User;
 import org.lab.service.OperatorRequestService;
 
 import java.util.List;
@@ -24,6 +25,13 @@ public class OperatorRequestController {
     }
 
     @GET
+    @Path("/mine/{id}")
+    public Response getAllOperatorRequestsByUserId(@PathParam("id") int id) {
+        List<OperatorRequest> operatorRequests = operatorRequestService.getAllByUserId(id);
+        return Response.ok(operatorRequests).build();
+    }
+
+    @GET
     @Path("/{id}")
     public Response getOperatorRequestById(@PathParam("id") int id) {
         OperatorRequest operatorRequest = operatorRequestService.getById(id);
@@ -34,8 +42,10 @@ public class OperatorRequestController {
     }
 
     @POST
-    public Response createOperatorRequest(OperatorRequest operatorRequest) {
-        operatorRequestService.create(operatorRequest);
+    @Path("/{id}")
+    public Response createOperatorRequest(@PathParam("id") int id) {
+        OperatorRequest operatorRequest = operatorRequestService.create(id);
+        System.out.println(operatorRequest);
         return Response.status(Response.Status.CREATED).entity(operatorRequest).build();
     }
 
@@ -46,7 +56,7 @@ public class OperatorRequestController {
         if (existingRequest == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        operatorRequest.setId(id); // Ensure correct ID is set
+        operatorRequest.setId(id);
         operatorRequestService.update(operatorRequest);
         return Response.ok(operatorRequest).build();
     }

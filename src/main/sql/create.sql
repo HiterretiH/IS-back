@@ -1,9 +1,4 @@
-CREATE DATABASE warehouse_management;
-
-\c warehouse_management
-
-
-CREATE TYPE user_role AS ENUM ('manager', 'operator');
+CREATE TYPE user_role AS ENUM ('manager', 'operator', 'worker');
 
 
 CREATE TYPE product_state_type AS ENUM ('sorting_to_store', 'sorting_to_ship', 'stored', 'shipped', 'disposed');
@@ -52,6 +47,59 @@ CREATE TABLE Partners (
     address TEXT
 );
 
+CREATE TABLE Warehouse (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(150) NOT NULL,
+    address TEXT NOT NULL
+);
+
+CREATE TABLE Manager (
+    id SERIAL PRIMARY KEY,
+    app_user_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
+    worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
+    warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE
+);
+
+ALTER TABLE Warehouse ADD COLUMN manager_id INT REFERENCES Manager(id);
+
+CREATE TABLE Shelf (
+                       id SERIAL PRIMARY KEY,
+                       location_id INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Sorting_Station (
+                                 id SERIAL PRIMARY KEY,
+                                 warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE,
+                                 location_id INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE,
+                                 capacity INT NOT NULL,
+                                 sort_time_seconds INT NOT NULL
+);
+
+CREATE TABLE Queue (
+                       id SERIAL PRIMARY KEY,
+                       capacity INT NOT NULL,
+                       sorting_station_id INT NOT NULL REFERENCES Sorting_Station(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Warehouse_Operator (
+                                    id SERIAL PRIMARY KEY,
+                                    app_user_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
+                                    worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
+                                    product_type_id INT REFERENCES Product_Type(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Loaders_And_Shelves (
+                                     id SERIAL PRIMARY KEY,
+                                     worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
+                                     shelf_id INT NOT NULL REFERENCES Shelf(id) ON DELETE CASCADE
+);
+
+CREATE TABLE Operator_Request (
+                                  id SERIAL PRIMARY KEY,
+                                  operator_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
+                                  status request_state_type NOT NULL,
+                                  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
 
 CREATE TABLE Product (
     id SERIAL PRIMARY KEY,
@@ -67,80 +115,11 @@ CREATE TABLE Product (
     priority INT
 );
 
-
-CREATE TABLE Queue (
-    id SERIAL PRIMARY KEY,
-    capacity INT NOT NULL,
-    sorting_station_id INT NOT NULL REFERENCES Sorting_Station(id) ON DELETE CASCADE
-);
-
-CREATE TABLE Shelf (
-    id SERIAL PRIMARY KEY,
-    location_id INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE
-);
-
-
-CREATE TABLE Warehouse (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(150) NOT NULL,
-    address TEXT NOT NULL
-);
-
-
-CREATE TABLE Goods_Management_Center (
-    id SERIAL PRIMARY KEY,
-    warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE,
-    location_id INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE,
-);
-
-
-CREATE TABLE Sorting_Station (
-    id SERIAL PRIMARY KEY,
-    management_center_id INT NOT NULL REFERENCES Goods_Management_Center(id) ON DELETE CASCADE,
-    location_id INT NOT NULL REFERENCES Location(id) ON DELETE CASCADE,
-    capacity INT NOT NULL,
-    sort_time_seconds INT NOT NULL
-);
-
-CREATE TABLE Manager (
-    id SERIAL PRIMARY KEY,
-    app_user_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
-    worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
-    warehouse_id INT NOT NULL REFERENCES Warehouse(id) ON DELETE CASCADE
-);
-
-
-CREATE TABLE Warehouse_Operator (
-    id SERIAL PRIMARY KEY,
-    app_user_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
-    worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE
-);
-
-
 CREATE TABLE Product_In_Queue (
     id SERIAL PRIMARY KEY,
     product_id INT NOT NULL REFERENCES Product(id) ON DELETE CASCADE,
     queue_id INT NOT NULL REFERENCES Queue(id) ON DELETE CASCADE
 );
-
-
-CREATE TABLE Loaders_And_Shelves (
-    id SERIAL PRIMARY KEY,
-    worker_id INT NOT NULL REFERENCES Worker(id) ON DELETE CASCADE,
-    shelf_id INT NOT NULL REFERENCES Shelf(id) ON DELETE CASCADE
-);
-
-
-CREATE TABLE Operator_Request (
-    id SERIAL PRIMARY KEY,
-    operator_id INT NOT NULL REFERENCES App_User(id) ON DELETE CASCADE,
-    status request_state_type NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
-
-
-ALTER TABLE Warehouse ADD COLUMN manager_id INT REFERENCES Manager(id);
-ALTER TABLE Queue ADD COLUMN sorting_station_id INT REFERENCES Sorting_Station(id);
 
 
 CREATE OR REPLACE FUNCTION check_initial_status()
@@ -174,44 +153,54 @@ BEFORE UPDATE ON Operator_Request
 FOR EACH ROW
 EXECUTE FUNCTION check_status_transition();
 
+CREATE OR REPLACE FUNCTION find_all_operator_requests_by_user(user_id INT)
+    RETURNS SETOF operator_request AS $$
+BEGIN
+    RETURN QUERY
+        SELECT o.*
+        FROM operator_request o
+        WHERE o.operator_id = $1;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE FUNCTION find_all_pending_operator_requests()
 RETURNS SETOF operator_request AS $$
 BEGIN
 RETURN QUERY
 SELECT o.*
 FROM operator_request o
-WHERE o.status = 'pending';
+WHERE o.status = 'PENDING';
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION find_all_in_queue(queue_id INT)
+CREATE OR REPLACE FUNCTION find_all_in_queue(queue INT)
 RETURNS SETOF product AS $$
 BEGIN
 RETURN QUERY
 SELECT p.*
 FROM product p
-WHERE p.queue_id = queue_id;
+WHERE p.queue_id = queue;
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE OR REPLACE FUNCTION find_queues_by_sorting_station(sorting_station_id INT)
+CREATE OR REPLACE FUNCTION find_queues_by_sorting_station(sorting_station INT)
 RETURNS SETOF queue AS $$
 BEGIN
 RETURN QUERY
 SELECT q.*
 FROM queue q
-WHERE q.sorting_station_id = sorting_station_id;
+WHERE q.sorting_station_id = sorting_station;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION find_user_by_username(username TEXT)
-RETURNS SETOF app_user AS $$
+    RETURNS SETOF app_user AS $$
 BEGIN
-RETURN QUERY
-SELECT u.*
-FROM app_user u
-WHERE u.username = username
-    LIMIT 1;
+    RETURN QUERY
+        SELECT u.*
+        FROM app_user u
+        WHERE u.username = $1
+        LIMIT 1;
 END;
 $$ LANGUAGE plpgsql;
 
