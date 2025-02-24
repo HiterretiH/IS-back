@@ -1,9 +1,7 @@
 -- Drop triggers
-DROP TRIGGER IF EXISTS check_operator_request_initial_status ON Operator_Request;
 DROP TRIGGER IF EXISTS check_operator_request_status_transition ON Operator_Request;
 
 -- Drop functions
-DROP FUNCTION IF EXISTS check_initial_status();
 DROP FUNCTION IF EXISTS check_status_transition();
 DROP FUNCTION IF EXISTS find_all_pending_operator_requests();
 DROP FUNCTION IF EXISTS find_all_in_queue(INT);

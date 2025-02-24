@@ -18,7 +18,7 @@ public class JwtUtils {
     private static final String SECRET_KEY = dotenv.get("SECRET_KEY");
     private static final long EXPIRATION_TIME = 1000*60*60 * 24;
 
-    public static Token generateToken(User user) {
+    public static String generateToken(User user) {
         assert SECRET_KEY != null;
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
         Role role = user.getRole();
@@ -31,7 +31,7 @@ public class JwtUtils {
                 .withExpiresAt(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .sign(algorithm);
 
-        return new Token(token, expirationTime, role);
+        return token;
     }
 
     public static boolean validateToken(String token, User user) {

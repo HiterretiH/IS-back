@@ -30,11 +30,6 @@ public class WarehouseOperatorService {
         warehouseOperatorRepository.delete(warehouseOperator.getId());
     }
 
-    public void fire(WarehouseOperator warehouseOperator) {
-        warehouseOperator.setStatus(Status.FIRED);
-        warehouseOperatorRepository.update(warehouseOperator);
-    }
-
     public void assignProductType(WarehouseOperator warehouseOperator, ProductType productType) {
         warehouseOperator.setProductType(productType);
         warehouseOperatorRepository.update(warehouseOperator);

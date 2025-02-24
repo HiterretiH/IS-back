@@ -67,19 +67,6 @@ public class WarehouseOperatorController {
     @Secured
     @ManagerOnly
     @POST
-    @Path("/{id}/fire")
-    public Response fireWarehouseOperator(@PathParam("id") int id) {
-        WarehouseOperator warehouseOperator = warehouseOperatorService.getById(id);
-        if (warehouseOperator == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        warehouseOperatorService.fire(warehouseOperator);
-        return Response.ok("Warehouse operator fired").build();
-    }
-
-    @Secured
-    @ManagerOnly
-    @POST
     @Path("/{id}/assign-product-type")
     public Response assignProductTypeToOperator(@PathParam("id") int id, ProductType productType) {
         WarehouseOperator warehouseOperator = warehouseOperatorService.getById(id);

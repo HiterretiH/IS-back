@@ -10,7 +10,7 @@ CREATE TYPE request_state_type AS ENUM ('pending', 'accepted', 'declined');
 CREATE TABLE App_User (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
-    password_hash VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
     role user_role NOT NULL
 );
 
@@ -109,23 +109,6 @@ CREATE TABLE Product_In_Queue (
     product_id INT NOT NULL REFERENCES Product(id) ON DELETE CASCADE,
     queue_id INT NOT NULL REFERENCES Queue(id) ON DELETE CASCADE
 );
-
-
-CREATE OR REPLACE FUNCTION check_initial_status()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.status != 'pending' THEN
-        RAISE EXCEPTION 'Status must be "pending" when creating a new Operator Request';
-    END IF;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER check_operator_request_initial_status
-BEFORE INSERT ON Operator_Request
-FOR EACH ROW
-EXECUTE FUNCTION check_initial_status();
-
 
 CREATE OR REPLACE FUNCTION check_status_transition()
 RETURNS TRIGGER AS $$

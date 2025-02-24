@@ -68,9 +68,4 @@ public class OperatorRequestService {
         operatorRequest.setStatus(RequestState.REJECTED);
         this.update(operatorRequest);
     }
-
-    public OperatorRequest getByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        return operatorRequestRepository.getByOperatorId(user.getId());
-    }
 }

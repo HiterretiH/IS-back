@@ -44,13 +44,6 @@ public class AuthFilter implements ContainerRequestFilter {
                 return;
             }
 
-            if (user.getRole() == null || user.getRole() == Role.PENDING) {
-                requestContext.abortWith(
-                        Response.status(Response.Status.UNAUTHORIZED).entity("User not approved").build()
-                );
-                return;
-            }
-
             httpServletRequest.setAttribute("currentUser", user);
         }
     }
