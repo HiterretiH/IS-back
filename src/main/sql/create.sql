@@ -1,10 +1,10 @@
-CREATE TYPE user_role AS ENUM ('manager', 'operator', 'user');
+CREATE TYPE user_role AS ENUM ('MANAGER', 'OPERATOR', 'USER');
 
 
-CREATE TYPE product_state_type AS ENUM ('sorting_to_store', 'sorting_to_ship', 'stored', 'shipped', 'disposed');
+CREATE TYPE product_state_type AS ENUM ('SORTING_TO_STORE', 'SORTING_TO_SHIP', 'STORED', 'SHIPPED', 'DISPOSED');
 
 
-CREATE TYPE request_state_type AS ENUM ('pending', 'accepted', 'declined');
+CREATE TYPE request_state_type AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED');
 
 
 CREATE TABLE App_User (
@@ -113,8 +113,8 @@ CREATE TABLE Product_In_Queue (
 CREATE OR REPLACE FUNCTION check_status_transition()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF OLD.status != 'pending' AND NEW.status = 'pending' THEN
-        RAISE EXCEPTION 'Status can only be updated to "accepted" or "declined" from "pending"';
+    IF OLD.status != 'PENDING' AND NEW.status = 'PENDING' THEN
+        RAISE EXCEPTION 'Status can only be updated to "accepted" or "declined" from "PENDING"';
     END IF;
     RETURN NEW;
 END;
@@ -292,3 +292,30 @@ BEGIN
     );
 END;
 $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_locations_paginated(page INT, size INT)
+    RETURNS SETOF JSONB AS $$
+BEGIN
+RETURN QUERY
+SELECT jsonb_build_object(
+               'id', l.id,
+               'name', l.name,
+               'description', l.description,
+               'location_row', l.location_row
+       )
+FROM location l
+ORDER BY l.id
+    LIMIT size OFFSET page * size;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_locations_count()
+    RETURNS INT AS $$
+BEGIN
+RETURN (
+    SELECT COUNT(*)
+    FROM location
+);
+END;
+$$ LANGUAGE plpgsql;
+

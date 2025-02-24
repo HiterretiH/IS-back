@@ -66,7 +66,7 @@ SELECT
     'Product #' || i,
     'Description for Product #' || i,
     CURRENT_DATE,
-    'stored',
+    'STORED',
     i
 FROM
     generate_series(1, 1000000) i;
