@@ -35,7 +35,6 @@ public class ManagerOrAllowedOperatorFilter implements ContainerRequestFilter {
             String path = requestContext.getUriInfo().getPath();
             String[] pathSegments = path.split("/");
 
-            // Check if the last segment of the path is a valid number (product ID)
             if (pathSegments.length > 0 && isNumeric(pathSegments[pathSegments.length - 1])) {
                 int productId = Integer.parseInt(pathSegments[pathSegments.length - 1]);
 
@@ -54,7 +53,6 @@ public class ManagerOrAllowedOperatorFilter implements ContainerRequestFilter {
                     requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("User not authorized to modify this product").build());
                 }
             }
-            // If the last part of the URI is not a valid product ID, the filter will pass and the request continues
         }
     }
 
@@ -67,4 +65,3 @@ public class ManagerOrAllowedOperatorFilter implements ContainerRequestFilter {
         }
     }
 }
-

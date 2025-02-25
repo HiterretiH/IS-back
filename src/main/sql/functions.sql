@@ -31,114 +31,61 @@ CREATE TRIGGER check_operator_request_status_transition
 
 
 
+DROP FUNCTION IF EXISTS find_all_pending_operator_requests();
+DROP FUNCTION IF EXISTS find_all_in_queue(int);
+DROP FUNCTION IF EXISTS find_queues_by_sorting_station(int);
+DROP FUNCTION IF EXISTS find_user_by_username(text);
+DROP FUNCTION IF EXISTS find_warehouse_operator_by_user_id(int);
+
 CREATE OR REPLACE FUNCTION find_all_pending_operator_requests()
-RETURNS TABLE(id INT, operator_id INT, status VARCHAR, created_at TIMESTAMP) AS $$
+RETURNS SETOF operator_request AS $$
 BEGIN
 RETURN QUERY
-SELECT operator_request.id, operator_request.operator_id, operator_request.status, operator_request.created_at
-FROM operator_request
-WHERE operator_request.status = 'PENDING';
+SELECT o.*
+FROM operator_request o
+WHERE o.status = 'PENDING';
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION find_all_operator_requests_by_user(op_id INT)
-RETURNS TABLE(id INT, operator_id INT, status VARCHAR, created_at TIMESTAMP) AS $$
+CREATE OR REPLACE FUNCTION find_all_in_queue(queue INT)
+RETURNS SETOF product AS $$
 BEGIN
 RETURN QUERY
-SELECT operator_request.id, operator_request.operator_id, operator_request.status, operator_request.created_at
-FROM operator_request
-WHERE operator_request.operator_id = op_id;
+SELECT p.*
+FROM product p
+WHERE p.queue_id = queue;
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION find_all_in_queue(q_id INT)
-RETURNS TABLE(
-    id INT,
-    description TEXT,
-    expirationdate DATE,
-    name VARCHAR,
-    priority INT,
-    productstate VARCHAR,
-    customer_id INT,
-    location_id INT,
-    product_type_id INT,
-    queue_id INT,
-    supplier_id INT
-) AS $$
+CREATE OR REPLACE FUNCTION find_queues_by_sorting_station(sorting_station INT)
+RETURNS SETOF queue AS $$
 BEGIN
 RETURN QUERY
-SELECT
-    product.id,
-    product.description,
-    product.expirationdate,
-    product.name,
-    product.priority,
-    product.productstate,
-    product.customer_id,
-    product.location_id,
-    product.product_type_id,
-    product.queue_id,
-    product.supplier_id
-FROM product
-WHERE product.queue_id = q_id;
+SELECT q.*
+FROM queue q
+WHERE q.sorting_station_id = sorting_station;
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION find_queues_by_sorting_station(in_station_id INT)
-RETURNS TABLE(
-    id INT,
-    capacity INT,
-    station_id INT
-) AS $$
+CREATE OR REPLACE FUNCTION find_user_by_username(username TEXT)
+    RETURNS SETOF app_user AS $$
 BEGIN
 RETURN QUERY
-SELECT
-    queue.id,
-    queue.capacity,
-    queue.station_id
-FROM queue
-WHERE queue.station_id = in_station_id;
+SELECT u.*
+FROM app_user u
+WHERE u.username = $1
+    LIMIT 1;
 END;
 $$ LANGUAGE plpgsql;
 
-
-CREATE OR REPLACE FUNCTION find_user_by_username(u_username VARCHAR)
-RETURNS TABLE(
-    id INT,
-    username VARCHAR,
-    password VARCHAR,
-    role VARCHAR
-) AS $$
+CREATE OR REPLACE FUNCTION find_warehouse_operator_by_user_id(user_id INT)
+RETURNS SETOF warehouse_operator AS $$
 BEGIN
 RETURN QUERY
-SELECT
-    app_user.id,
-    app_user.username,
-    app_user.password,
-    app_user.role
-FROM app_user
-WHERE app_user.username = u_username;
-END;
-$$ LANGUAGE plpgsql;
-
-
-CREATE OR REPLACE FUNCTION find_warehouse_operator_by_user_id(u_id INT)
-RETURNS TABLE(
-    id INT,
-    app_user_id INT,
-    product_type_id INT
-) AS $$
-BEGIN
-RETURN QUERY
-SELECT
-    warehouse_operator.id,
-    warehouse_operator.app_user_id,
-    warehouse_operator.product_type_id
-FROM warehouse_operator
-WHERE warehouse_operator.app_user_id = u_id;
+SELECT wo.*
+FROM warehouse_operator wo
+WHERE wo.app_user_id = user_id
+    LIMIT 1;
 END;
 $$ LANGUAGE plpgsql;
 
