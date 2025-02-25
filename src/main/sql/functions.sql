@@ -347,3 +347,38 @@ RETURN (
 );
 END;
 $$ LANGUAGE plpgsql;
+
+
+DO $$
+DECLARE
+fk_name text;
+    fk_column text;
+    ref_table text;
+    ref_column text;
+    tbl_name text;
+BEGIN
+FOR tbl_name IN
+SELECT DISTINCT tc.table_name
+FROM information_schema.table_constraints tc
+WHERE tc.constraint_type = 'FOREIGN KEY'
+    LOOP
+        FOR fk_name, fk_column, ref_table, ref_column IN
+SELECT
+    tc.constraint_name,
+    kcu.column_name,
+    ccu.table_name AS ref_table,
+    ccu.column_name AS ref_column
+FROM information_schema.key_column_usage kcu
+         JOIN information_schema.table_constraints tc
+              ON kcu.constraint_name = tc.constraint_name
+         JOIN information_schema.constraint_column_usage ccu
+              ON tc.constraint_name = ccu.constraint_name
+WHERE tc.table_name = tbl_name
+  AND tc.constraint_type = 'FOREIGN KEY'
+    LOOP
+            EXECUTE format('ALTER TABLE %I DROP CONSTRAINT %I', tbl_name, fk_name);
+EXECUTE format('ALTER TABLE %I ADD CONSTRAINT %I FOREIGN KEY (%I) REFERENCES %I(%I) ON DELETE CASCADE',
+               tbl_name, fk_name, fk_column, ref_table, ref_column);
+END LOOP;
+END LOOP;
+END $$;
