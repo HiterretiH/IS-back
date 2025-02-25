@@ -24,7 +24,12 @@ public class LocationService {
     }
 
     public void create(Location location) {
-        locationRepository.save(location);
+        Location newLocation = new Location();
+        newLocation.setLocationRow(location.getLocationRow());
+        newLocation.setDescription(location.getDescription());
+        newLocation.setName(location.getName());
+
+        locationRepository.save(newLocation);
     }
 
     public void update(Location location) {

@@ -37,7 +37,13 @@ public class SortingStationService {
     }
 
     public void create(SortingStation sortingStation) {
-        sortingStationRepository.save(sortingStation);
+        SortingStation newSortingStation = new SortingStation();
+        newSortingStation.setWarehouse(sortingStation.getWarehouse());
+        newSortingStation.setLocation(sortingStation.getLocation());
+        newSortingStation.setCapacity(sortingStation.getCapacity());
+        newSortingStation.setSortTimeSeconds(sortingStation.getSortTimeSeconds());
+
+        sortingStationRepository.save(newSortingStation);
     }
 
     public void delete(SortingStation sortingStation) {

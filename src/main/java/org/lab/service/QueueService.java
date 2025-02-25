@@ -31,7 +31,11 @@ public class QueueService {
     }
 
     public void create(Queue queue) {
-        queueRepository.save(queue);
+        Queue newQueue = new Queue();
+        newQueue.setCapacity(queue.getCapacity());
+        newQueue.setSortingStation(queue.getSortingStation());
+
+        queueRepository.save(newQueue);
     }
 
     public void update(Queue queue) {queueRepository.update(queue);}

@@ -26,7 +26,11 @@ public class WarehouseService {
     }
 
     public void create(Warehouse warehouse) {
-        warehouseRepository.save(warehouse);
+        Warehouse newWarehouse = new Warehouse();
+        newWarehouse.setName(warehouse.getName());
+        newWarehouse.setAddress(warehouse.getAddress());
+
+        warehouseRepository.save(newWarehouse);
     }
 
     public void delete(Warehouse warehouse) {

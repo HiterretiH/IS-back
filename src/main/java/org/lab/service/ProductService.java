@@ -34,7 +34,19 @@ public class ProductService {
     }
 
     public void create(Product product) {
-        productRepository.save(product);
+        Product newProduct = new Product();
+        newProduct.setProductType(product.getProductType());
+        newProduct.setLocation(product.getLocation());
+        newProduct.setSupplier(product.getSupplier());
+        newProduct.setCustomer(product.getCustomer());
+        newProduct.setQueue(product.getQueue());
+        newProduct.setName(product.getName());
+        newProduct.setDescription(product.getDescription());
+        newProduct.setExpirationDate(product.getExpirationDate());
+        newProduct.setProductState(product.getProductState());
+        newProduct.setPriority(product.getPriority());
+
+        productRepository.save(newProduct);
     }
 
     public void update(Product product) {

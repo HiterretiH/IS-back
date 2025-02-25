@@ -24,7 +24,13 @@ public class PartnersService {
     }
 
     public void create(Partners partner) {
-        partnersRepository.save(partner);
+        Partners newPartner = new Partners();
+        newPartner.setAddress(partner.getAddress());
+        newPartner.setName(partner.getName());
+        newPartner.setEmail(partner.getEmail());
+        newPartner.setPhoneNumber(partner.getPhoneNumber());
+
+        partnersRepository.save(newPartner);
     }
 
     public void delete(Partners partner) {

@@ -20,8 +20,7 @@ public abstract class GenericRepository<T, ID> {
 
     @Transactional
     public T save(T entity) {
-        entityManager.persist(entity);
-        return entity;
+        return entityManager.merge(entity);
     }
 
     @Transactional

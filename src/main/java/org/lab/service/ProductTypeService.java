@@ -24,7 +24,10 @@ public class ProductTypeService {
     }
 
     public void create(ProductType productType) {
-        productTypeRepository.save(productType);
+        ProductType newProductType = new ProductType();
+        newProductType.setName(productType.getName());
+
+        productTypeRepository.save(newProductType);
     }
 
     public void delete(ProductType productType) {

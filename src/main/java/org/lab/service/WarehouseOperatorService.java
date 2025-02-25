@@ -23,7 +23,11 @@ public class WarehouseOperatorService {
     }
 
     public void create(WarehouseOperator warehouseOperator) {
-        warehouseOperatorRepository.save(warehouseOperator);
+        WarehouseOperator newWarehouseOperator = new WarehouseOperator();
+        newWarehouseOperator.setAppUser(warehouseOperator.getAppUser());
+        newWarehouseOperator.setProductType(warehouseOperator.getProductType());
+
+        warehouseOperatorRepository.save(newWarehouseOperator);
     }
 
     public void delete(WarehouseOperator warehouseOperator) {

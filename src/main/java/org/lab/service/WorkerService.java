@@ -22,7 +22,18 @@ public class WorkerService {
 
     public Worker getById(int id) {return workerRepository.findById(id);}
 
-    public void create(Worker worker) {workerRepository.save(worker);}
+    public void create(Worker worker) {
+        Worker newWorker = new Worker();
+        newWorker.setFirstName(worker.getFirstName());
+        newWorker.setLastName(worker.getLastName());
+        newWorker.setMiddleName(worker.getMiddleName());
+        newWorker.setBirthDate(worker.getBirthDate());
+        newWorker.setHireDate(worker.getHireDate());
+        newWorker.setStatus(worker.getStatus());
+        newWorker.setWarehouse(worker.getWarehouse());
+
+        workerRepository.save(newWorker);
+    }
 
     public void delete(Worker worker) {workerRepository.delete(worker.getId());}
 
