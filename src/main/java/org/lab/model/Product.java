@@ -35,8 +35,7 @@ public class Product {
     private Partners customer;
 
     @ManyToOne
-    @JoinColumn(name = "queue_id", nullable = false)
-    @NotNull
+    @JoinColumn(name = "queue_id")
     private Queue queue;
 
     @Column(nullable = false, length = 100)

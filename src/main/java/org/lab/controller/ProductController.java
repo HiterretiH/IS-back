@@ -7,6 +7,7 @@ import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOrAllowedOperator;
 import org.lab.annotations.Secured;
 import org.lab.model.Product;
+import org.lab.model.ProductState;
 import org.lab.model.ProductType;
 import org.lab.model.SortingStation;
 import org.lab.service.ProductService;
@@ -115,6 +116,9 @@ public class ProductController {
         if (product == null || sortingStation == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+        if (product.getProductState() != ProductState.STORED) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
+        }
         productService.sortToShip(product, sortingStation);
         return Response.ok(product).build();
     }
@@ -128,6 +132,9 @@ public class ProductController {
         SortingStation sortingStation = sortingStationService.getById(stationId);
         if (product == null || sortingStation == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        if (product.getProductState() != ProductState.PENDING) {
+            return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
         productService.sortToStore(product, sortingStation);
         return Response.ok(product).build();

@@ -98,6 +98,7 @@ public class SortingStationController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         sortingStationService.simulateSort(station);
+        System.out.println("Finished sorting");
         return Response.ok().build();
     }
 }

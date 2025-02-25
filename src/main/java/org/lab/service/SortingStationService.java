@@ -77,8 +77,9 @@ public class SortingStationService {
         product.setProductState(
                 product.getProductState() == ProductState.SORTING_TO_SHIP ?
                 ProductState.SHIPPED :
-                ProductState.SORTING_TO_STORE
+                ProductState.STORED
         );
+        product.setQueue(null);
 
         productRepository.update(product);
         System.out.println("Finished sorting product: " + product.getName());

@@ -45,6 +45,7 @@ public class ProductService {
         newProduct.setExpirationDate(product.getExpirationDate());
         newProduct.setProductState(product.getProductState());
         newProduct.setPriority(product.getPriority());
+        newProduct.setProductState(ProductState.PENDING);
 
         productRepository.save(newProduct);
     }
