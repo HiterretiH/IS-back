@@ -50,7 +50,6 @@ public class OperatorRequestController {
     @Path("/{id}")
     public Response createOperatorRequest(@PathParam("id") int id) {
         OperatorRequest operatorRequest = operatorRequestService.create(id);
-        System.out.println(operatorRequest);
         return Response.status(Response.Status.CREATED).entity(operatorRequest).build();
     }
 

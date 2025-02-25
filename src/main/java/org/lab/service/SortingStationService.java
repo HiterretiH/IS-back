@@ -68,7 +68,6 @@ public class SortingStationService {
     private void simulateSortingForProduct(Product product, SortingStation sortingStation) {
         int timeDelaySeconds = sortingStation.getSortTimeSeconds();
         try {
-            System.out.println("Sorting product: " + product.getName() + " (Delay: " + timeDelaySeconds + " seconds)");
             Thread.sleep(timeDelaySeconds * 1000L);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -82,6 +81,5 @@ public class SortingStationService {
         product.setQueue(null);
 
         productRepository.update(product);
-        System.out.println("Finished sorting product: " + product.getName());
     }
 }
