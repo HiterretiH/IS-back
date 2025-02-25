@@ -6,8 +6,6 @@
     <persistence-unit name="default">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>org.lab.model.Worker</class>
-        <class>org.lab.model.GoodsManagementCenter</class>
-        <class>org.lab.model.Manager</class>
         <class>org.lab.model.LoadersAndShelves</class>
         <class>org.lab.model.Location</class>
         <class>org.lab.model.OperatorRequest</class>
@@ -15,10 +13,7 @@
         <class>org.lab.model.Product</class>
         <class>org.lab.model.ProductType</class>
         <class>org.lab.model.Queue</class>
-        <class>org.lab.model.Shelf</class>
-        <class>org.lab.model.SortingRequest</class>
         <class>org.lab.model.SortingStation</class>
-        <class>org.lab.model.TypesAndOperators</class>
         <class>org.lab.model.User</class>
         <class>org.lab.model.Warehouse</class>
         <class>org.lab.model.WarehouseOperator</class>
