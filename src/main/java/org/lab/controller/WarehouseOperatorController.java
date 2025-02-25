@@ -7,7 +7,10 @@ import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.ProductType;
+import org.lab.model.User;
 import org.lab.model.WarehouseOperator;
+import org.lab.service.ProductTypeService;
+import org.lab.service.UserService;
 import org.lab.service.WarehouseOperatorService;
 import org.lab.validation.ModelValidator;
 
@@ -20,6 +23,12 @@ public class WarehouseOperatorController {
 
     @Inject
     private WarehouseOperatorService warehouseOperatorService;
+
+    @Inject
+    private UserService userService;
+
+    @Inject
+    private ProductTypeService productTypeService;
 
     @Secured
     @GET
@@ -37,6 +46,25 @@ public class WarehouseOperatorController {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
         return Response.ok(warehouseOperator).build();
+    }
+
+    @Secured
+    @GET
+    @Path("/product-type-by-user/{id}")
+    public Response getProductTypeByUserId(@PathParam("id") int id) {
+        User user = userService.getById(id);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        WarehouseOperator operator = warehouseOperatorService.getByUserId(id);
+        if (operator == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        ProductType productType = productTypeService.getById(operator.getProductType().getId());
+        if (productType == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(productType).build();
     }
 
     @Secured

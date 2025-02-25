@@ -22,6 +22,10 @@ public class WarehouseOperatorService {
         return warehouseOperatorRepository.findById(id);
     }
 
+    public WarehouseOperator getByUserId(int id) {
+        return warehouseOperatorRepository.findByUserId(id);
+    }
+
     public void create(WarehouseOperator warehouseOperator) {
         WarehouseOperator newWarehouseOperator = new WarehouseOperator();
         newWarehouseOperator.setAppUser(warehouseOperator.getAppUser());
