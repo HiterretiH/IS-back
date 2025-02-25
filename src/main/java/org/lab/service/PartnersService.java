@@ -2,6 +2,7 @@ package org.lab.service;
 
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
+import org.lab.model.Location;
 import org.lab.model.Partners;
 import org.lab.repository.PartnersRepository;
 import org.lab.utils.PaginatedResponse;
@@ -31,6 +32,10 @@ public class PartnersService {
         newPartner.setPhoneNumber(partner.getPhoneNumber());
 
         partnersRepository.save(newPartner);
+    }
+
+    public void update(Partners partner) {
+        partnersRepository.update(partner);
     }
 
     public void delete(Partners partner) {

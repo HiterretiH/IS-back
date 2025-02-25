@@ -33,22 +33,38 @@ public class ManagerOrAllowedOperatorFilter implements ContainerRequestFilter {
             User user = (User) requestContext.getProperty("currentUser");
 
             String path = requestContext.getUriInfo().getPath();
-            int productId = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+            String[] pathSegments = path.split("/");
 
-            Product product = productService.getById(productId);
+            // Check if the last segment of the path is a valid number (product ID)
+            if (pathSegments.length > 0 && isNumeric(pathSegments[pathSegments.length - 1])) {
+                int productId = Integer.parseInt(pathSegments[pathSegments.length - 1]);
 
-            if (product == null || product.getProductType() == null) {
-                requestContext.abortWith(Response.status(Response.Status.NOT_FOUND).entity("Product not found").build());
-                return;
+                Product product = productService.getById(productId);
+
+                if (product == null || product.getProductType() == null) {
+                    requestContext.abortWith(Response.status(Response.Status.NOT_FOUND).entity("Product not found").build());
+                    return;
+                }
+
+                ProductType productType = product.getProductType();
+
+                WarehouseOperator warehouseOperator = warehouseOperatorRepository.findByUserId(user.getId());
+
+                if (!user.getRole().equals(Role.MANAGER) && (warehouseOperator == null || warehouseOperator.getProductType() != productType)) {
+                    requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("User not authorized to modify this product").build());
+                }
             }
+            // If the last part of the URI is not a valid product ID, the filter will pass and the request continues
+        }
+    }
 
-            ProductType productType = product.getProductType();
-
-            WarehouseOperator warehouseOperator = warehouseOperatorRepository.findByUserId(user.getId());
-
-            if (warehouseOperator == null || (warehouseOperator.getProductType() != productType && !user.getRole().equals(Role.MANAGER))) {
-                requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("User not authorized to modify this product").build());
-            }
+    private boolean isNumeric(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
 }
+

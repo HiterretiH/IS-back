@@ -3,6 +3,7 @@ package org.lab.service;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import org.lab.model.Partners;
+import org.lab.model.SortingStation;
 import org.lab.model.Warehouse;
 import org.lab.repository.PartnersRepository;
 import org.lab.repository.WarehouseRepository;
@@ -31,6 +32,10 @@ public class WarehouseService {
         newWarehouse.setAddress(warehouse.getAddress());
 
         warehouseRepository.save(newWarehouse);
+    }
+
+    public void update(Warehouse warehouse) {
+        warehouseRepository.update(warehouse);
     }
 
     public void delete(Warehouse warehouse) {

@@ -3,6 +3,7 @@ package org.lab.service;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import org.lab.model.Status;
+import org.lab.model.Warehouse;
 import org.lab.model.Worker;
 import org.lab.repository.WorkerRepository;
 import org.lab.utils.PaginatedResponse;
@@ -33,6 +34,10 @@ public class WorkerService {
         newWorker.setWarehouse(worker.getWarehouse());
 
         workerRepository.save(newWorker);
+    }
+
+    public void update(Worker worker) {
+        workerRepository.update(worker);
     }
 
     public void delete(Worker worker) {workerRepository.delete(worker.getId());}

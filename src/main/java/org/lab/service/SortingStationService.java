@@ -3,10 +3,7 @@ package org.lab.service;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.lab.model.Product;
-import org.lab.model.ProductState;
-import org.lab.model.Queue;
-import org.lab.model.SortingStation;
+import org.lab.model.*;
 import org.lab.repository.ProductRepository;
 import org.lab.repository.QueueRepository;
 import org.lab.repository.SortingStationRepository;
@@ -44,6 +41,10 @@ public class SortingStationService {
         newSortingStation.setSortTimeSeconds(sortingStation.getSortTimeSeconds());
 
         sortingStationRepository.save(newSortingStation);
+    }
+
+    public void update(SortingStation sortingStation) {
+        sortingStationRepository.update(sortingStation);
     }
 
     public void delete(SortingStation sortingStation) {

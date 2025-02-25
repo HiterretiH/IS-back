@@ -128,19 +128,15 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION find_warehouse_operator_by_user_id(u_id INT)
 RETURNS TABLE(
     id INT,
-    status VARCHAR,
     app_user_id INT,
-    product_type INT,
-    worker_id INT
+    product_type_id INT
 ) AS $$
 BEGIN
 RETURN QUERY
 SELECT
     warehouse_operator.id,
-    warehouse_operator.status,
     warehouse_operator.app_user_id,
-    warehouse_operator.product_type,
-    warehouse_operator.worker_id
+    warehouse_operator.product_type_id
 FROM warehouse_operator
 WHERE warehouse_operator.app_user_id = u_id;
 END;

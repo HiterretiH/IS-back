@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
+import org.lab.model.Partners;
 import org.lab.model.SortingStation;
 import org.lab.service.SortingStationService;
 import org.lab.utils.PaginatedResponse;
@@ -53,6 +54,26 @@ public class SortingStationController {
         sortingStationService.create(sortingStation);
         return Response.status(Response.Status.CREATED).build();
     }
+
+    @Secured
+    @ManagerOnly
+    @PUT
+    @Path("/{id}")
+    public Response updateSortingStation(@PathParam("id") int id, SortingStation sortingStation) {
+        SortingStation existingSortingStation = sortingStationService.getById(id);
+        if (existingSortingStation == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        sortingStation.setId(id);
+
+        if (!ModelValidator.validate(sortingStation)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
+        sortingStationService.update(sortingStation);
+        return Response.ok(sortingStation).build();
+    }
+
 
     @Secured
     @ManagerOnly

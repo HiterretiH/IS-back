@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
+import org.lab.model.Location;
 import org.lab.model.Partners;
 import org.lab.service.PartnersService;
 import org.lab.utils.PaginatedResponse;
@@ -52,6 +53,25 @@ public class PartnersController {
 
         partnersService.create(partner);
         return Response.status(Response.Status.CREATED).entity(partner).build();
+    }
+
+    @Secured
+    @ManagerOnly
+    @PUT
+    @Path("/{id}")
+    public Response updatePartners(@PathParam("id") int id, Partners partners) {
+        Partners existingPartners = partnersService.getById(id);
+        if (existingPartners == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        partners.setId(id);
+
+        if (!ModelValidator.validate(partners)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
+        partnersService.update(partners);
+        return Response.ok(partners).build();
     }
 
     @Secured

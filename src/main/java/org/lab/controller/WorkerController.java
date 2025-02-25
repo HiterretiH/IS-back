@@ -7,6 +7,7 @@ import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
 import org.lab.model.Status;
+import org.lab.model.Warehouse;
 import org.lab.model.Worker;
 import org.lab.service.WorkerService;
 import org.lab.utils.PaginatedResponse;
@@ -56,6 +57,26 @@ public class WorkerController {
         workerService.create(worker);
         return Response.status(Response.Status.CREATED).entity(worker).build();
     }
+
+    @Secured
+    @ManagerOnly
+    @PUT
+    @Path("/{id}")
+    public Response updateWorker(@PathParam("id") int id, Worker worker) {
+        Worker existingWorker = workerService.getById(id);
+        if (existingWorker == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        worker.setId(id);
+
+        if (!ModelValidator.validate(worker)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
+        workerService.update(worker);
+        return Response.ok(worker).build();
+    }
+
 
     @DELETE
     @Path("/{id}")

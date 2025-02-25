@@ -45,9 +45,8 @@ SELECT
 FROM
     generate_series(1, 100000) i;
 
-INSERT INTO Product (product_type_id, location_id, supplier_id, customer_id, queue_id, name, description, expiration_date, product_state, priority)
+INSERT INTO Product (product_type_id, location_id, supplier_id, customer_id, name, description, expiration_date, product_state, priority)
 SELECT
-    i,
     i,
     i,
     i,

@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
+import org.lab.model.Queue;
 import org.lab.model.Warehouse;
 import org.lab.service.WarehouseService;
 import org.lab.utils.PaginatedResponse;
@@ -50,6 +51,25 @@ public class WarehouseController {
 
         warehouseService.create(warehouse);
         return Response.status(Response.Status.CREATED).entity(warehouse).build();
+    }
+
+    @Secured
+    @ManagerOnly
+    @PUT
+    @Path("/{id}")
+    public Response updateWarehouse(@PathParam("id") int id, Warehouse warehouse) {
+        Warehouse existingWarehouse = warehouseService.getById(id);
+        if (existingWarehouse == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        warehouse.setId(id);
+
+        if (!ModelValidator.validate(warehouse)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
+        warehouseService.update(warehouse);
+        return Response.ok(warehouse).build();
     }
 
     @Secured

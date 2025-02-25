@@ -6,6 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.lab.annotations.ManagerOnly;
 import org.lab.annotations.Secured;
+import org.lab.model.Partners;
 import org.lab.model.Queue;
 import org.lab.service.QueueService;
 import org.lab.utils.PaginatedResponse;
@@ -52,6 +53,25 @@ public class QueueController {
 
         queueService.create(queue);
         return Response.status(Response.Status.CREATED).entity(queue).build();
+    }
+
+    @Secured
+    @ManagerOnly
+    @PUT
+    @Path("/{id}")
+    public Response updateQueue(@PathParam("id") int id, Queue queue) {
+        Queue existingQueue = queueService.getById(id);
+        if (existingQueue == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        queue.setId(id);
+
+        if (!ModelValidator.validate(queue)) {
+            return ModelValidator.getValidationErrorResponse();
+        }
+
+        queueService.update(queue);
+        return Response.ok(queue).build();
     }
 
     @Secured
