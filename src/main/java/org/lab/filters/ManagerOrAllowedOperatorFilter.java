@@ -32,22 +32,27 @@ public class ManagerOrAllowedOperatorFilter implements ContainerRequestFilter {
         if (resourceInfo.getResourceMethod().isAnnotationPresent(ManagerOrAllowedOperator.class)) {
             User user = (User) requestContext.getProperty("currentUser");
 
-            String path = requestContext.getUriInfo().getPath();
-            int productId = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
+            try {
+                String path = requestContext.getUriInfo().getPath();
+                int productId = Integer.parseInt(path.substring(path.lastIndexOf("/") + 1));
 
-            Product product = productService.getById(productId);
+                Product product = productService.getById(productId);
 
-            if (product == null || product.getProductType() == null) {
-                requestContext.abortWith(Response.status(Response.Status.NOT_FOUND).entity("Product not found").build());
-                return;
+                if (product == null || product.getProductType() == null) {
+                    requestContext.abortWith(Response.status(Response.Status.NOT_FOUND).entity("Product not found").build());
+                    return;
+                }
+
+                ProductType productType = product.getProductType();
+
+                WarehouseOperator warehouseOperator = warehouseOperatorRepository.findByUserId(user.getId());
+
+                if (warehouseOperator == null || (warehouseOperator.getProductType() != productType && !user.getRole().equals(Role.MANAGER))) {
+                    requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("User not authorized to modify this product").build());
+                }
             }
-
-            ProductType productType = product.getProductType();
-
-            WarehouseOperator warehouseOperator = warehouseOperatorRepository.findByUserId(user.getId());
-
-            if (warehouseOperator == null || (warehouseOperator.getProductType() != productType && !user.getRole().equals(Role.MANAGER))) {
-                requestContext.abortWith(Response.status(Response.Status.FORBIDDEN).entity("User not authorized to modify this product").build());
+            catch (Exception e) {
+                return;
             }
         }
     }
