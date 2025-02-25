@@ -45,12 +45,6 @@ SELECT
 FROM
     generate_series(1, 100000) i;
 
-INSERT INTO App_User (username, password, role)
-SELECT
-    'User #' || i, 'Password #' || i*10, 'USER'
-FROM
-    generate_series(1, 100000) i;
-
 INSERT INTO Product (product_type_id, location_id, supplier_id, customer_id, queue_id, name, description, expiration_date, product_state, priority)
 SELECT
     i,
@@ -63,12 +57,6 @@ SELECT
     CURRENT_DATE,
     'STORED',
     i
-FROM
-    generate_series(1, 100000) i;
-
-INSERT INTO Warehouse_Operator (app_user_id, product_type_id)
-SELECT
-    i, i
 FROM
     generate_series(1, 100000) i;
 

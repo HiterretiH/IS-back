@@ -280,6 +280,7 @@ SELECT (jsonb_build_object(
         'first_name', w.first_name,
         'last_name', w.last_name,
         'middle_name', w.middle_name,
+        'status', w.status,
         'birth_date', w.birth_date,
         'hire_date', w.hire_date,
         'warehouse_id', w.warehouse_id
