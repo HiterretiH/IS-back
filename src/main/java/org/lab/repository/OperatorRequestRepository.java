@@ -27,7 +27,6 @@ public class OperatorRequestRepository extends GenericRepository<OperatorRequest
             Query query = entityManager.createNativeQuery(
                     "SELECT * FROM find_all_operator_requests_by_user(:user_id)", OperatorRequest.class);
             query.setParameter("user_id", id);
-            System.out.println(query.getResultList());
             return (List<OperatorRequest>) query.getResultList();
         } catch (NoResultException e) {
             return null;

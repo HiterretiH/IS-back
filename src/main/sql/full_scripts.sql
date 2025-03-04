@@ -365,6 +365,29 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION get_queues_count_by_sorting_station(sorting_station_id_param INT)
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Queue
+        WHERE sorting_station_id = sorting_station_id_param
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_products_count_by_queue(queue_id_param INT)
+    RETURNS INT AS $$
+BEGIN
+    RETURN (
+        SELECT COUNT(*)
+        FROM Product
+        WHERE queue_id = queue_id_param
+    );
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 
 INSERT INTO Location (name, description, location_row)
