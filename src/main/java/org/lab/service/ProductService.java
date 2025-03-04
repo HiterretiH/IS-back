@@ -79,25 +79,21 @@ public class ProductService {
     public void putInQueue(Product product, SortingStation sortingStation) {
         List<Queue> queues = queueRepository.findBySortingStation(sortingStation);
 
-        // Try to find an optimal queue for the product
         Queue queue = findOptimalQueue(product, queues);
 
         if (queue == null) {
             int queuesInSortingStation = queueRepository.countBySortingStation(sortingStation.getId());
 
-            // Check if sorting station's overall capacity is reached before creating a new queue
             if (queuesInSortingStation >= sortingStation.getCapacity()) {
                 throw new IllegalStateException("Sorting station capacity exceeded. Cannot add product to queue.");
             }
 
-            // No suitable queue, create a new one for the sorting station
             queue = new Queue();
             queue.setSortingStation(sortingStation);
-            queue.setCapacity(10); // You may replace this with a dynamic value if needed
-            queueRepository.save(queue);  // Save the new queue instead of update
+            queue.setCapacity(10);
+            queueRepository.save(queue);
         }
 
-        // Assign the found or newly created queue to the product
         product.setQueue(queue);
         this.update(product);
     }
