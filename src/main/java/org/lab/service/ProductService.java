@@ -18,9 +18,6 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Inject
-    private SortingStationRepository sortingStationRepository;
-
-    @Inject
     private QueueRepository queueRepository;
 
     public PaginatedResponse<String> getAll(int page, int size) {
@@ -58,7 +55,6 @@ public class ProductService {
         productRepository.delete(product.getId());
     }
 
-
     @Transactional
     public void dispose(Product product) {
         product.setProductState(ProductState.DISPOSED);
@@ -72,7 +68,6 @@ public class ProductService {
         putInQueue(product, sortingStation);
     }
 
-
     @Transactional
     public void sortToStore(Product product, SortingStation sortingStation) {
         product.setProductState(ProductState.SORTING_TO_STORE);
@@ -84,21 +79,25 @@ public class ProductService {
     public void putInQueue(Product product, SortingStation sortingStation) {
         List<Queue> queues = queueRepository.findBySortingStation(sortingStation);
 
+        // Try to find an optimal queue for the product
         Queue queue = findOptimalQueue(product, queues);
 
         if (queue == null) {
+            int queuesInSortingStation = queueRepository.countBySortingStation(sortingStation.getId());
+
+            // Check if sorting station's overall capacity is reached before creating a new queue
+            if (queuesInSortingStation >= sortingStation.getCapacity()) {
+                throw new IllegalStateException("Sorting station capacity exceeded. Cannot add product to queue.");
+            }
+
+            // No suitable queue, create a new one for the sorting station
             queue = new Queue();
-            queue.setCapacity(10); // Default capacity
             queue.setSortingStation(sortingStation);
-            queueRepository.update(queue);
+            queue.setCapacity(10); // You may replace this with a dynamic value if needed
+            queueRepository.save(queue);  // Save the new queue instead of update
         }
 
-        // Check if the queue has enough capacity
-        int productsInQueue = productRepository.countByQueue(queue.getId());
-        if (productsInQueue >= queue.getCapacity()) {
-            throw new IllegalStateException("Queue capacity exceeded. Cannot add product to the queue.");
-        }
-
+        // Assign the found or newly created queue to the product
         product.setQueue(queue);
         this.update(product);
     }

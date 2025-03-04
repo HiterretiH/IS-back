@@ -34,4 +34,10 @@ public class QueueRepository extends GenericRepository<Queue, Integer> {
         Query query = entityManager.createNativeQuery("SELECT * FROM get_queues_count()");
         return (Integer) query.getSingleResult();
     }
+
+    public Integer countBySortingStation(Integer sortingStationId) {
+        Query query = entityManager.createNativeQuery("SELECT * FROM get_queues_count_by_sorting_station(:sortingStationId)");
+        query.setParameter("sortingStationId", sortingStationId);
+        return (Integer) query.getSingleResult();
+    }
 }
