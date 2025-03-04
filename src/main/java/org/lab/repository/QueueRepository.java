@@ -30,7 +30,6 @@ public class QueueRepository extends GenericRepository<Queue, Integer> {
         return query.getResultList();
     }
 
-
     public Integer count() {
         Query query = entityManager.createNativeQuery("SELECT * FROM get_queues_count()");
         return (Integer) query.getSingleResult();

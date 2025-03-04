@@ -119,7 +119,12 @@ public class ProductController {
         if (product.getProductState() != ProductState.STORED) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
-        productService.sortToShip(product, sortingStation);
+
+        try {
+            productService.sortToShip(product, sortingStation);
+        } catch (IllegalStateException e) {
+            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+        }
         return Response.ok(product).build();
     }
 
@@ -136,7 +141,11 @@ public class ProductController {
         if (product.getProductState() != ProductState.PENDING) {
             return Response.status(Response.Status.NOT_ACCEPTABLE).build();
         }
-        productService.sortToStore(product, sortingStation);
+        try {
+            productService.sortToStore(product, sortingStation);
+        } catch (IllegalStateException e) {
+            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+        }
         return Response.ok(product).build();
     }
 

@@ -88,8 +88,15 @@ public class ProductService {
 
         if (queue == null) {
             queue = new Queue();
+            queue.setCapacity(10); // Default capacity
             queue.setSortingStation(sortingStation);
             queueRepository.update(queue);
+        }
+
+        // Check if the queue has enough capacity
+        int productsInQueue = productRepository.countByQueue(queue.getId());
+        if (productsInQueue >= queue.getCapacity()) {
+            throw new IllegalStateException("Queue capacity exceeded. Cannot add product to the queue.");
         }
 
         product.setQueue(queue);
@@ -105,7 +112,8 @@ public class ProductService {
                     .filter(p -> p.getPriority() > currentProduct.getPriority())
                     .count();
 
-            if (countHigherPriority < minCount) {
+            int productsInQueue = productRepository.countByQueue(q.getId());
+            if (productsInQueue < q.getCapacity() && countHigherPriority < minCount) {
                 minCount = (int) countHigherPriority;
                 optQueue = q;
             }
@@ -114,7 +122,6 @@ public class ProductService {
         return optQueue;
     }
 
-    // Изменить приоритет, используемый при сортировке
     @Transactional
     public void setPriority(Product product, int priority) {
         product.setPriority(priority);

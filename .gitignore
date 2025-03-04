@@ -1,5 +1,7 @@
 target/
-wildfly/
+wildfly-course/
+wildfly-local/
+wildfly-preview-26.1.3.helios/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

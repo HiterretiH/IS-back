@@ -35,4 +35,10 @@ public class ProductRepository extends GenericRepository<Product, Integer> {
         Query query = entityManager.createNativeQuery("SELECT * FROM get_products_count()");
         return (Integer) query.getSingleResult();
     }
+
+    public int countByQueue(int queueId) {
+        Query query = entityManager.createNativeQuery("SELECT * FROM get_products_count_by_queue(:queueId)");
+        query.setParameter("queueId", queueId);
+        return (Integer) query.getSingleResult();
+    }
 }

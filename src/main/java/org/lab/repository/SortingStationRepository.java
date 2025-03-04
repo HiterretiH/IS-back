@@ -20,9 +20,14 @@ public class SortingStationRepository extends GenericRepository<SortingStation, 
         return query.getResultList();
     }
 
-
     public Integer count() {
         Query query = entityManager.createNativeQuery("SELECT * FROM get_sorting_stations_count()");
+        return (Integer) query.getSingleResult();
+    }
+
+    public Integer countQueuesBySortingStation(Integer sortingStationId) {
+        Query query = entityManager.createNativeQuery("SELECT * FROM get_queues_count_by_sorting_station(:sortingStationId)");
+        query.setParameter("sortingStationId", sortingStationId);
         return (Integer) query.getSingleResult();
     }
 }
